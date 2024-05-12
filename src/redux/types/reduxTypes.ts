@@ -11,3 +11,9 @@ export interface allProductsTypes {
   thumbnail: string;
   images: [];
 }
+export interface getDatatypes {
+  products: allProductsTypes[];
+  limite: number;
+  skip: number;
+  total: number;
+}
