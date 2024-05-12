@@ -1,8 +1,15 @@
 import { Menu, Typography } from "antd";
 import { HomeFilled, ShoppingCartOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { openDrawer } from "../redux/slices/appActions";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
   const handleMenuClick = () => {};
+  const handlelogin = () => {
+    dispatch(openDrawer());
+  };
   return (
     <div className="navBar">
       <Menu
@@ -88,10 +95,16 @@ const Navbar = () => {
       />
       <Typography.Title level={2}>Entgra Store</Typography.Title>
       <div className="cartLogin">
-        <Typography.Title level={2}>
+        <Typography.Title style={{ cursor: "pointer" }} level={2}>
           <ShoppingCartOutlined />
         </Typography.Title>
-        <Typography.Title level={5}>Login</Typography.Title>
+        <Typography.Title
+          onClick={handlelogin}
+          style={{ cursor: "pointer" }}
+          level={5}
+        >
+          login
+        </Typography.Title>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { appApi } from "./rtkApi";
+import appActions from "./slices/appActions";
 
 export const store = configureStore({
   reducer: {
     [appApi.reducerPath]: appApi.reducer,
+    appController: appActions,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(appApi.middleware),

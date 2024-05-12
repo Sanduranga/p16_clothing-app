@@ -1,5 +1,6 @@
 import { Card, Image, List, Typography } from "antd";
 import { useGetAllproductsQuery } from "../redux/rtkApi";
+import Login from "./login";
 
 const Home = () => {
   const { data, isLoading } = useGetAllproductsQuery();
@@ -38,6 +39,7 @@ const Home = () => {
         }}
         dataSource={data?.products}
       ></List>
+      <Login />
     </div>
   );
 };
