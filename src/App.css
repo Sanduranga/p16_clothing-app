@@ -4,3 +4,18 @@
   padding: 2rem;
   text-align: center;
 } */
+
+.navBar {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 1px 2px 2px #00000033;
+  padding-right: 10px;
+}
+
+.cartLogin {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}

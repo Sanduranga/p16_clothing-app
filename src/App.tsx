@@ -1,12 +1,13 @@
-import { Typography } from "antd";
 import "./App.css";
+import Navbar from "./components/nav-bar";
+
+import Home from "./pages/home";
 
 function App() {
-  const { Title } = Typography;
   return (
     <>
-      <Typography>Hi</Typography>
-      <Title level={5}>Hey</Title>
+      <Navbar />
+      <Home />
     </>
   );
 }
