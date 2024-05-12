@@ -19,3 +19,12 @@
   gap: 20px;
   align-items: center;
 }
+
+.itemCard,
+.itemCardBadge {
+  margin: 8px;
+}
+.itemCardImage {
+  height: 150px !important;
+  object-fit: scale-down;
+}
