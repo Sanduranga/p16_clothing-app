@@ -12,17 +12,6 @@ const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: "Please enter your full name",
-            },
-          ]}
-          name="name"
-        >
-          <Input placeholder="Enter your full name.." />
-        </Form.Item>
-        <Form.Item
-          rules={[
-            {
-              required: true,
               type: "email",
               message: "Please enter a valid email",
             },

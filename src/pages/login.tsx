@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Drawer, Space, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
@@ -34,6 +34,12 @@ const Login: React.FC = () => {
         <div
           style={{ position: "absolute", width: "60%", padding: "0 50px 0 0" }}
         >
+          <Button
+            style={{ marginBottom: 10, backgroundColor: "green" }}
+            onClick={() => dispatch(openDrawer())}
+          >
+            Back
+          </Button>
           {!signIn ? (
             <Col>
               <LoginForm />

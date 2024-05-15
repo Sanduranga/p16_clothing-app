@@ -1,14 +1,33 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { userlogingTypes } from "../types/types";
 import { useDispatch } from "react-redux";
 import { signInForm } from "../redux/slices/appActions";
+import { useState } from "react";
 
 const SigninForm = () => {
   const dispatch = useDispatch();
+  const [load, setLoad] = useState(false);
 
-  const onSignUp = (data: userlogingTypes) => {
-    console.log(data);
+  const onSignUp = async (data: userlogingTypes) => {
+    setLoad(true);
+    const res = await fetch("http://localhost:8080/api/users/add-user", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+      }),
+    });
+    if (res.ok) {
+      setLoad(false);
+      message.open({
+        type: "success",
+        content: "Registered successfully!",
+      });
+    }
   };
 
   return (
@@ -59,7 +78,12 @@ const SigninForm = () => {
         >
           <Input.Password placeholder="Confirm your password" />
         </Form.Item>
-        <Button style={{ marginRight: 10 }} type="primary" htmlType="submit">
+        <Button
+          style={{ marginRight: 10 }}
+          type="primary"
+          htmlType="submit"
+          loading={load}
+        >
           Signup
         </Button>
         <Button
