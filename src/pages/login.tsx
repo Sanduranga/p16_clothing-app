@@ -1,20 +1,29 @@
-import React from "react";
-import { Button, Drawer, Space } from "antd";
+import React, { useState } from "react";
+import { Button, Col, Drawer, Space, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { openDrawer } from "../redux/slices/appActions";
+import { openDrawer, signInForm } from "../redux/slices/appActions";
+import LoginForm from "../components/loginForm";
+import SigninForm from "../components/signinForm";
 
 const Login: React.FC = () => {
   const action = useSelector((state: RootState) => state.appController.drawer);
+  const signIn = useSelector((state: RootState) => state.appController.signIn);
   const dispatch = useDispatch();
+
   return (
     <>
       <Drawer
-        title="Drawer with extra actions"
+        title={`Hi.. ${signIn ? "signup" : "login"} here.`}
         placement={"left"}
-        width={500}
+        width={800}
         open={action}
         closable={false}
+        style={{
+          position: "relative",
+          borderRadius: "0 100% 40% 0",
+          padding: "0 100px 40px 0",
+        }}
         extra={
           <Space>
             <Button onClick={() => dispatch(openDrawer())}>Cancel</Button>
@@ -22,9 +31,25 @@ const Login: React.FC = () => {
           </Space>
         }
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <div
+          style={{ position: "absolute", width: "60%", padding: "0 50px 0 0" }}
+        >
+          {!signIn ? (
+            <Col>
+              <LoginForm />
+              <Typography.Title level={4}>create an account?</Typography.Title>
+              <Button
+                onClick={() => dispatch(signInForm(true))}
+                type="primary"
+                htmlType="submit"
+              >
+                Signup
+              </Button>
+            </Col>
+          ) : (
+            <SigninForm />
+          )}
+        </div>
       </Drawer>
     </>
   );

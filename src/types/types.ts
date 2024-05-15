@@ -17,3 +17,8 @@ export interface getDatatypes {
   skip: number;
   total: number;
 }
+export interface userlogingTypes {
+  name: string;
+  email: string;
+  password: string;
+}
