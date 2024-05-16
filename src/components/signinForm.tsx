@@ -1,4 +1,4 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Select, message } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { userlogingTypes } from "../types/types";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { useState } from "react";
 const SigninForm = () => {
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
+  const [userType, setUserType] = useState<"buyer" | "seller">("buyer");
 
   const onSignUp = async (data: userlogingTypes) => {
     setLoad(true);
@@ -19,6 +20,8 @@ const SigninForm = () => {
       body: JSON.stringify({
         name: data.name,
         email: data.email,
+        password: data.password,
+        userType: userType,
       }),
     });
     if (res.ok) {
@@ -26,6 +29,13 @@ const SigninForm = () => {
       message.open({
         type: "success",
         content: "Registered successfully!",
+      });
+    }
+    if (!res.ok) {
+      setLoad(false);
+      message.open({
+        type: "error",
+        content: "Something went wrong!",
       });
     }
   };
@@ -55,6 +65,17 @@ const SigninForm = () => {
           name="email"
         >
           <Input placeholder="Enter your email.." />
+        </Form.Item>
+        <Form.Item>
+          <Select
+            defaultValue="buyer"
+            style={{ width: 120 }}
+            onChange={(value) => setUserType(value as "buyer" | "seller")}
+            options={[
+              { value: "buyer", label: "Buyer" },
+              { value: "seller", label: "Seller" },
+            ]}
+          />
         </Form.Item>
         <Form.Item
           rules={[
@@ -89,7 +110,6 @@ const SigninForm = () => {
         <Button
           onClick={() => dispatch(signInForm(false))}
           type="primary"
-          htmlType="submit"
           icon={<RollbackOutlined />}
         >
           Login

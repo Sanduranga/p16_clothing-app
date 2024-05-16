@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { appControllerSliceTypes } from "../../types/types";
 
-const initialState = {
+const initialState: appControllerSliceTypes = {
   drawer: false,
-  signIn: false,
+  signInForm: false,
+  loggedUser: {
+    name: "",
+    email: "",
+    loggedIn: false,
+  },
 };
 
 const appControllerSlice = createSlice({
@@ -13,10 +19,17 @@ const appControllerSlice = createSlice({
       state.drawer = !state.drawer;
     },
     signInForm: (state, action) => {
-      state.signIn = action.payload;
+      state.signInForm = action.payload;
+    },
+    setUserName: (state, action) => {
+      state.loggedUser.name = action.payload;
+    },
+    loggedIn: (state, action) => {
+      state.loggedUser.loggedIn = action.payload;
     },
   },
 });
 
-export const { openDrawer, signInForm } = appControllerSlice.actions;
+export const { openDrawer, signInForm, setUserName, loggedIn } =
+  appControllerSlice.actions;
 export default appControllerSlice.reducer;

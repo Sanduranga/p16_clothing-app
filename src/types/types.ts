@@ -11,6 +11,15 @@ export interface allProductsTypes {
   thumbnail: string;
   images: [];
 }
+export interface appControllerSliceTypes {
+  drawer: boolean;
+  signInForm: boolean;
+  loggedUser: {
+    name: string;
+    email: string;
+    loggedIn: boolean;
+  };
+}
 export interface getDatatypes {
   products: allProductsTypes[];
   limite: number;
@@ -21,4 +30,5 @@ export interface userlogingTypes {
   name: string;
   email: string;
   password: string;
+  userType: string;
 }

@@ -1,10 +1,15 @@
 import { Menu, Typography } from "antd";
 import { HomeFilled, ShoppingCartOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openDrawer } from "../redux/slices/appActions";
+import { RootState } from "../redux/store";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const { name, loggedIn } = useSelector(
+    (state: RootState) => state.appController.loggedUser
+  );
+  const truncatedName = name.split("").slice(0, 5).join("");
 
   const handleMenuClick = () => {};
   const handlelogin = () => {
@@ -103,7 +108,7 @@ const Navbar = () => {
           style={{ cursor: "pointer" }}
           level={5}
         >
-          login
+          {loggedIn ? `Hi ${truncatedName}` : "Login"}
         </Typography.Title>
       </div>
     </div>

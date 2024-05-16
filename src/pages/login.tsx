@@ -8,7 +8,9 @@ import SigninForm from "../components/signinForm";
 
 const Login: React.FC = () => {
   const action = useSelector((state: RootState) => state.appController.drawer);
-  const signIn = useSelector((state: RootState) => state.appController.signIn);
+  const signIn = useSelector(
+    (state: RootState) => state.appController.signInForm
+  );
   const dispatch = useDispatch();
 
   return (
