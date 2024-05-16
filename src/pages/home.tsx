@@ -2,7 +2,7 @@ import { Card, Image, List, Typography } from "antd";
 import { useGetAllproductsQuery } from "../redux/rtkApi";
 import Login from "./login";
 
-const Home = () => {
+const Home: React.FC = () => {
   const { data, isLoading } = useGetAllproductsQuery();
 
   return (

@@ -3,6 +3,7 @@ import { HomeFilled, ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { openDrawer } from "../redux/slices/appActions";
 import { RootState } from "../redux/store";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -103,6 +104,17 @@ const Navbar = () => {
         <Typography.Title style={{ cursor: "pointer" }} level={2}>
           <ShoppingCartOutlined />
         </Typography.Title>
+        <Link style={{ textDecoration: "none" }} to={"/add-items"}>
+          <Typography.Title
+            level={5}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            Add items
+          </Typography.Title>
+        </Link>
+
         <Typography.Title
           onClick={handlelogin}
           style={{ cursor: "pointer" }}

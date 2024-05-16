@@ -28,3 +28,7 @@
   height: 150px !important;
   object-fit: scale-down;
 }
+.addItem {
+  padding: 20px;
+  margin: 0 auto;
+}
