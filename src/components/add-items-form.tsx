@@ -15,7 +15,7 @@ const AddFormItems = () => {
       body: JSON.stringify({
         itemColor: data.itemColor,
         itemIs: data.itemIs,
-        itemName: data.itemName,
+        itemTitle: data.itemTitle,
         itemSize: data.itemSize,
         itemType: data.itemType,
         materialName: data.materialName,
@@ -26,6 +26,7 @@ const AddFormItems = () => {
         sellingType: data.sellingType,
         sellingPrice: data.sellingPrice,
         stockClearingPrice: data.stockClearingPrice,
+        description: data.description,
       }),
     });
     if (res.ok) {
@@ -139,7 +140,11 @@ const AddFormItems = () => {
                     },
                   ]}
                 >
-                  <Input type="number" />
+                  <Input
+                    variant="filled"
+                    style={{ borderColor: "#1d914c" }}
+                    type="number"
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Add Percentage"
@@ -151,7 +156,11 @@ const AddFormItems = () => {
                     },
                   ]}
                 >
-                  <Input type="number" />
+                  <Input
+                    variant="filled"
+                    style={{ borderColor: "#1d914c" }}
+                    type="number"
+                  />
                 </Form.Item>
               </>
             )}
@@ -166,7 +175,11 @@ const AddFormItems = () => {
                 },
               ]}
             >
-              <Input type="number" />
+              <Input
+                variant="filled"
+                style={{ borderColor: "#1d914c" }}
+                type="number"
+              />
             </Form.Item>
           )}
           {item.sellingType === "stockClearing" && (
@@ -180,7 +193,11 @@ const AddFormItems = () => {
                 },
               ]}
             >
-              <Input type="number" />
+              <Input
+                variant="filled"
+                style={{ borderColor: "#1d914c" }}
+                type="number"
+              />
             </Form.Item>
           )}
           {item.sellingType === "normal" && item.itemIs === "ourProduct" && (
@@ -194,7 +211,11 @@ const AddFormItems = () => {
                 },
               ]}
             >
-              <Input type="number" />
+              <Input
+                variant="filled"
+                style={{ borderColor: "#1d914c" }}
+                type="number"
+              />
             </Form.Item>
           )}
         </div>
@@ -206,8 +227,8 @@ const AddFormItems = () => {
                 message: "Please enter item name",
               },
             ]}
-            label="Item name"
-            name="itemName"
+            label="Item title"
+            name="itemTitle"
           >
             <Input />
           </Form.Item>
@@ -218,11 +239,25 @@ const AddFormItems = () => {
             rules={[
               {
                 required: true,
-                message: "Please enter item type",
+                message: "Please select item type",
               },
             ]}
           >
-            <Input />
+            <Select
+              style={{ width: 250 }}
+              options={[
+                { value: "mensShirts", label: "Men's Shirts" },
+                { value: "mensGeans", label: "Men's Geans" },
+                { value: "mensShoes", label: "Men's Shoes" },
+                { value: "womensBlouses", label: "Women's Blouses" },
+                { value: "womensGeans", label: "Women's Geans" },
+                { value: "womensshoes", label: "Women's Shoes" },
+                { value: "womensBags", label: "Women's Bags" },
+                { value: "kidsDresses", label: "Kids Dresses" },
+                { value: "kidsShoes", label: "Kids Shoes" },
+                { value: "kidsBags", label: "Kids Bags" },
+              ]}
+            />
           </Form.Item>
           <Form.Item
             label="Item color"
@@ -269,6 +304,18 @@ const AddFormItems = () => {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Please enter description",
+              },
+            ]}
+            label="Description"
+            name="itemDescription"
+          >
+            <Input.TextArea />
           </Form.Item>
 
           <Form.Item>

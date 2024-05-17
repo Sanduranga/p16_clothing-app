@@ -36,7 +36,7 @@ export interface userlogingTypes {
 export interface itemTypes {
   name: string;
   materialName: string;
-  itemName: string;
+  itemTitle: string;
   buyingPrice: number;
   sellingType: string;
   sellingPrice: number;
@@ -47,4 +47,5 @@ export interface itemTypes {
   itemIs: string;
   itemColor: string;
   itemSize: string;
+  description: string;
 }

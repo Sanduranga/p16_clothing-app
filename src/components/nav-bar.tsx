@@ -39,12 +39,12 @@ const Navbar = () => {
                 key: "mens-shirts",
               },
               {
-                label: "Men's Shoes",
-                key: "mens-shoes",
+                label: "Men's Geans",
+                key: "mens-geans",
               },
               {
-                label: "Men's Watches",
-                key: "mens-watches",
+                label: "Men's Shoes",
+                key: "mens-shoes",
               },
             ],
           },
@@ -53,24 +53,20 @@ const Navbar = () => {
             key: "women",
             children: [
               {
-                label: "Women's Dresses",
-                key: "womens-dresses",
+                label: "Women's Blouses",
+                key: "womens-blouses",
+              },
+              {
+                label: "Women's Geans",
+                key: "womens-geans",
               },
               {
                 label: "Women's Shoes",
                 key: "womens-shoes",
               },
               {
-                label: "Women's Watches",
-                key: "womens-watches",
-              },
-              {
                 label: "Women's Bags",
                 key: "womens-bags",
-              },
-              {
-                label: "Women's Jewellery",
-                key: "womens-jewellery",
               },
             ],
           },
@@ -85,10 +81,6 @@ const Navbar = () => {
               {
                 label: "Kids Shoes",
                 key: "kids-shoes",
-              },
-              {
-                label: "Kids Watches",
-                key: "kids-watches",
               },
               {
                 label: "Kids Bags",
