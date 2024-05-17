@@ -3,16 +3,19 @@ import { HomeFilled, ShoppingCartOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { openDrawer } from "../redux/slices/appActions";
 import { RootState } from "../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { name, loggedIn } = useSelector(
     (state: RootState) => state.appController.loggedUser
   );
   const truncatedName = name.split("").slice(0, 5).join("");
 
-  const handleMenuClick = () => {};
+  const handleMenuClick = (item: any) => {
+    navigate(`/${item.key}`);
+  };
   const handlelogin = () => {
     dispatch(openDrawer());
   };

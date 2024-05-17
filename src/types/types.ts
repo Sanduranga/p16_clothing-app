@@ -33,16 +33,18 @@ export interface userlogingTypes {
   userType: string;
 }
 
-export interface Item {
-  buyerName: string;
+export interface itemTypes {
+  name: string;
   materialName: string;
-  materialType: string;
+  itemName: string;
   buyingPrice: number;
-  sellingPercentage: number;
-  sellingPrice: number;
   sellingType: string;
-  itemCode: string;
+  sellingPrice: number;
+  itemType: string;
+  normalPercentage: number;
   salePercentage?: number;
   stockClearingPrice?: number;
   itemIs: string;
+  itemColor: string;
+  itemSize: string;
 }

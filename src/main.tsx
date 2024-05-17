@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AddItems from "./pages/add-items.tsx";
+import Login from "./pages/login.tsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/add-items",
     element: <AddItems />,
+  },
+  {
+    path: "/loging",
+    element: <Login />,
   },
 ]);
 

@@ -1,45 +1,49 @@
 import { Button, Form, Input, Select, message } from "antd";
-import { Item, userlogingTypes } from "../types/types";
-import { useDispatch } from "react-redux";
+import { itemTypes } from "../types/types";
 import { useState } from "react";
-import { Option } from "antd/es/mentions";
 
 const AddFormItems = () => {
-  const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
 
-  const handleSubmit = async (data: userlogingTypes) => {
-    console.log(data);
-
-    // setLoad(true);
-    // const res = await fetch("http://localhost:8080/api/users/add-user", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     name: data.name,
-    //     email: data.email,
-    //     password: data.password,
-    //     userType: userType,
-    //   }),
-    // });
-    // if (res.ok) {
-    //   setLoad(false);
-    //   message.open({
-    //     type: "success",
-    //     content: "Registered successfully!",
-    //   });
-    // }
-    // if (!res.ok) {
-    //   setLoad(false);
-    //   message.open({
-    //     type: "error",
-    //     content: "Something went wrong!",
-    //   });
-    // }
+  const handleSubmit = async (data: itemTypes) => {
+    setLoad(true);
+    const res = await fetch("http://localhost:8080/api/items/add-item", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        itemColor: data.itemColor,
+        itemIs: data.itemIs,
+        itemName: data.itemName,
+        itemSize: data.itemSize,
+        itemType: data.itemType,
+        materialName: data.materialName,
+        buyingPrice: data.buyingPrice,
+        name: data.name,
+        normalPercentage: data.normalPercentage,
+        salePercentage: data.salePercentage,
+        sellingType: data.sellingType,
+        sellingPrice: data.sellingPrice,
+        stockClearingPrice: data.stockClearingPrice,
+      }),
+    });
+    if (res.ok) {
+      setLoad(false);
+      message.open({
+        type: "success",
+        content: "Registered successfully!",
+      });
+    }
+    if (!res.ok) {
+      setLoad(false);
+      message.open({
+        type: "error",
+        content: "Something went wrong!",
+      });
+    }
   };
-  const [item, setItem] = useState<Partial<Item>>({});
+  const [item, setItem] = useState<Partial<itemTypes>>({});
   const handleSelectChange = (value: string, name: string) => {
     setItem({
       ...item,
@@ -124,18 +128,32 @@ const AddFormItems = () => {
           </Form.Item>
           {item.sellingType === "normal" &&
             item.itemIs === "anotherSellerProduct" && (
-              <Form.Item
-                label="Add Percentage"
-                name="addPercentage"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please add percentage",
-                  },
-                ]}
-              >
-                <Input type="number" />
-              </Form.Item>
+              <>
+                <Form.Item
+                  label="Buying Price"
+                  name="buyingPrice"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter stock buying price",
+                    },
+                  ]}
+                >
+                  <Input type="number" />
+                </Form.Item>
+                <Form.Item
+                  label="Add Percentage"
+                  name="normalPercentage"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please add percentage",
+                    },
+                  ]}
+                >
+                  <Input type="number" />
+                </Form.Item>
+              </>
             )}
           {item.sellingType === "sale" && (
             <Form.Item
@@ -254,7 +272,7 @@ const AddFormItems = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button loading={load} type="primary" htmlType="submit">
               Add Item
             </Button>
           </Form.Item>
