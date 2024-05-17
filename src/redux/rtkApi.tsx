@@ -1,12 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getDatatypes } from "../types/types";
+import { itemTypes } from "../types/types";
 
 export const appApi = createApi({
   reducerPath: "appApis",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/" }),
+  tagTypes: ["refresh"],
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api/" }),
   endpoints: (builder) => ({
-    getAllproducts: builder.query<getDatatypes, void>({
-      query: () => "/products",
+    getAllproducts: builder.query<itemTypes[], void>({
+      query: () => "items/get-items",
+      providesTags: ["refresh"],
     }),
   }),
 });

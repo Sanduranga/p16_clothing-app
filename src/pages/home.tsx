@@ -14,16 +14,14 @@ const Home: React.FC = () => {
           return (
             <Card
               className="itemCard"
-              title={products.title}
+              title={products.itemTitle}
               key={index}
-              cover={
-                <Image className="itemCardImage" src={products.thumbnail} />
-              }
+              cover={<Image className="itemCardImage" src={"bag.jpg"} />}
             >
               <Card.Meta
                 title={
                   <Typography.Paragraph>
-                    Price: ${products.price}
+                    Price: ${products.sellingPrice}
                   </Typography.Paragraph>
                 }
                 description={
@@ -37,7 +35,7 @@ const Home: React.FC = () => {
             </Card>
           );
         }}
-        dataSource={data?.products}
+        dataSource={data}
       ></List>
       <Login />
     </div>

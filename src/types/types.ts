@@ -21,7 +21,7 @@ export interface appControllerSliceTypes {
   };
 }
 export interface getDatatypes {
-  products: allProductsTypes[];
+  products: itemTypes[];
   limite: number;
   skip: number;
   total: number;

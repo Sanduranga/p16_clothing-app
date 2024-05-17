@@ -313,7 +313,7 @@ const AddFormItems = () => {
               },
             ]}
             label="Description"
-            name="itemDescription"
+            name="description"
           >
             <Input.TextArea />
           </Form.Item>
