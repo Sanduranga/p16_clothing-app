@@ -1,48 +1,57 @@
-import { Button, Form, Input, Select, message } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { itemTypes } from "../types/types";
 import { useState } from "react";
+import { CodeGenerater } from "../lib/utill";
 
 const AddFormItems = () => {
   const [load, setLoad] = useState(false);
 
   const handleSubmit = async (data: itemTypes) => {
     setLoad(true);
-    const res = await fetch("http://localhost:8080/api/items/add-item", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        itemColor: data.itemColor,
-        itemIs: data.itemIs,
-        itemTitle: data.itemTitle,
-        itemSize: data.itemSize,
-        itemType: data.itemType,
-        materialName: data.materialName,
-        buyingPrice: data.buyingPrice,
-        name: data.name,
-        normalPercentage: data.normalPercentage,
-        salePercentage: data.salePercentage,
-        sellingType: data.sellingType,
-        sellingPrice: data.sellingPrice,
-        stockClearingPrice: data.stockClearingPrice,
-        description: data.description,
-      }),
-    });
-    if (res.ok) {
-      setLoad(false);
-      message.open({
-        type: "success",
-        content: "Registered successfully!",
-      });
-    }
-    if (!res.ok) {
-      setLoad(false);
-      message.open({
-        type: "error",
-        content: "Something went wrong!",
-      });
-    }
+    const code = CodeGenerater(
+      data.name,
+      data.itemType,
+      data.itemColor,
+      data.itemSize,
+      data.materialName
+    );
+    console.log(code);
+    // const res = await fetch("http://localhost:8080/api/items/add-item", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     itemColor: data.itemColor,
+    //     itemIs: data.itemIs,
+    //     itemTitle: data.itemTitle,
+    //     itemSize: data.itemSize,
+    //     itemType: data.itemType,
+    //     materialName: data.materialName,
+    //     buyingPrice: data.buyingPrice,
+    //     name: data.name,
+    //     normalPercentage: data.normalPercentage,
+    //     salePercentage: data.salePercentage,
+    //     sellingType: data.sellingType,
+    //     sellingPrice: data.sellingPrice,
+    //     stockClearingPrice: data.stockClearingPrice,
+    //     description: data.description,
+    //   }),
+    // });
+    // if (res.ok) {
+    //   setLoad(false);
+    //   message.open({
+    //     type: "success",
+    //     content: "Registered successfully!",
+    //   });
+    // }
+    // if (!res.ok) {
+    //   setLoad(false);
+    //   message.open({
+    //     type: "error",
+    //     content: "Something went wrong!",
+    //   });
+    // }
   };
   const [item, setItem] = useState<Partial<itemTypes>>({});
   const handleSelectChange = (value: string, name: string) => {
@@ -72,7 +81,7 @@ const AddFormItems = () => {
                 message: "Please enter your full name",
               },
             ]}
-            label="Name"
+            label="Your name"
             name="name"
           >
             <Input />
@@ -319,7 +328,7 @@ const AddFormItems = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button loading={load} type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit">
               Add Item
             </Button>
           </Form.Item>
