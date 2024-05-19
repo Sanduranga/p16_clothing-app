@@ -6,11 +6,14 @@ export const appApi = createApi({
   tagTypes: ["refresh"],
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/api/" }),
   endpoints: (builder) => ({
-    getAllproducts: builder.query<itemTypes[], void>({
+    getAllItems: builder.query<itemTypes[], void>({
       query: () => "items/get-items",
       providesTags: ["refresh"],
+    }),
+    getOneItem: builder.query<itemTypes, string>({
+      query: (id) => `items/get-item?id=${id}`,
     }),
   }),
 });
 
-export const { useGetAllproductsQuery } = appApi;
+export const { useGetAllItemsQuery, useGetOneItemQuery } = appApi;

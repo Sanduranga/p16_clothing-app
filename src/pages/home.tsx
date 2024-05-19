@@ -1,10 +1,11 @@
 import { Card, Image, List, Typography } from "antd";
-import { useGetAllproductsQuery } from "../redux/rtkApi";
+import { useGetAllItemsQuery } from "../redux/rtkApi";
 import Login from "./login";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
-  const { data, isLoading } = useGetAllproductsQuery();
-
+  const { data, isLoading } = useGetAllItemsQuery();
+  const navigate = useNavigate();
   return (
     <div>
       <List
@@ -16,7 +17,15 @@ const Home: React.FC = () => {
               className="itemCard"
               title={products.itemTitle}
               key={index}
-              cover={<Image className="itemCardImage" src={"bag.jpg"} />}
+              cover={
+                <Image
+                  preview={false}
+                  className="itemCardImage"
+                  src={"bag.jpg"}
+                />
+              }
+              onClick={() => navigate("/clicked-item")}
+              loading={isLoading}
             >
               <Card.Meta
                 title={
