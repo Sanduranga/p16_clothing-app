@@ -23,10 +23,18 @@
 .itemCardBadge {
   margin: 8px;
 }
+
 .itemCardImage {
   height: 150px !important;
   object-fit: scale-down;
 }
+
+.clickedImage {
+  height: 300px !important;
+  object-fit: contain;
+  object-position: center;
+}
+
 .addItem {
   padding: 20px;
   margin: 0 auto;
