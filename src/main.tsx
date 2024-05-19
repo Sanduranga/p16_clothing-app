@@ -6,7 +6,8 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.tsx";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AddItems from "./pages/add-items.tsx";
-import Login from "./pages/login.tsx";
+import ClickedItemPage from "./pages/clicked-item.tsx";
+import { ConfigProvider } from "antd";
 
 const router = createBrowserRouter([
   {
@@ -18,15 +19,38 @@ const router = createBrowserRouter([
     element: <AddItems />,
   },
   {
-    path: "/loging",
-    element: <Login />,
+    path: "/clicked-item",
+    element: <ClickedItemPage />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            colorPrimary: "#a30a1e",
+            algorithm: true,
+          },
+          Input: {
+            colorPrimary: "#eb2f96",
+            algorithm: true,
+          },
+          Carousel: {
+            arrowSize: 32,
+            arrowOffset: 16,
+            algorithm: true,
+          },
+          Badge: {
+            statusSize: 12,
+          },
+        },
+      }}
+    >
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </ConfigProvider>
   </React.StrictMode>
 );
