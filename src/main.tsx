@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     element: <AddItems />,
   },
   {
-    path: "/clicked-item",
+    path: "/clicked-item/:code",
     element: <ClickedItemPage />,
   },
 ]);
@@ -29,14 +29,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ConfigProvider
       theme={{
         components: {
-          Button: {
-            colorPrimary: "#a30a1e",
-            algorithm: true,
-          },
-          Input: {
-            colorPrimary: "#eb2f96",
-            algorithm: true,
-          },
           Carousel: {
             arrowSize: 32,
             arrowOffset: 16,

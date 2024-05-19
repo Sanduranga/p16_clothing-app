@@ -24,7 +24,7 @@ const Home: React.FC = () => {
                   src={"bag.jpg"}
                 />
               }
-              onClick={() => navigate("/clicked-item")}
+              onClick={() => navigate(`/clicked-item/${"3"}`)}
               loading={isLoading}
             >
               <Card.Meta

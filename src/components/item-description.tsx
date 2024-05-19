@@ -1,15 +1,13 @@
-import React from "react";
 import { Badge, Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
-import { useGetOneItemQuery } from "../redux/rtkApi";
+import { itemTypes } from "../types/types";
 
-const ItemDescription: React.FC = () => {
-  const { data } = useGetOneItemQuery("3");
+const ItemDescription = ({ data }: { data: itemTypes }) => {
   const items: DescriptionsProps["items"] = [
     {
       key: "1",
       label: "Product",
-      children: data?.itemTitle,
+      children: data.itemTitle,
     },
     {
       key: "2",
