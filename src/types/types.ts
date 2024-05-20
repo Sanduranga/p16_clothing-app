@@ -48,4 +48,5 @@ export interface itemTypes {
   itemColor: string;
   itemSize: string;
   description: string;
+  numberOfItems: number;
 }
