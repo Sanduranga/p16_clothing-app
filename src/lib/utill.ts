@@ -18,7 +18,6 @@ export function CodeGenerater(
   const code4 = substractor(size);
   const code5 = substractor(material);
   const code = code1 + code2 + code3 + code4 + code5;
-  console.log(code);
 
   return code;
 }
