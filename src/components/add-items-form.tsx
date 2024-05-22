@@ -11,10 +11,10 @@ import {
 import { itemTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import { CodeGenerater, SalePriceCal } from "../lib/utill";
+import { usePostItemMutation } from "../redux/rtkApi";
 
 const AddFormItems = () => {
   const firstRender = useRef(true);
-  const [load, setLoad] = useState(false);
   const [getInputs, setGetInputs] = useState({
     buyingPrice: 0,
     sellingPrice: 0,
@@ -44,8 +44,9 @@ const AddFormItems = () => {
     }
   }, [getInputs.profitPercentage, getInputs.buyingPrice]);
 
+  const [postItem, { isLoading, isSuccess, isError }] = usePostItemMutation();
+
   const handleSubmit = async (data: itemTypes) => {
-    setLoad(true);
     const code = CodeGenerater(
       data.sellerName,
       data.itemType,
@@ -53,53 +54,38 @@ const AddFormItems = () => {
       data.itemSize,
       data.materialName
     );
-    console.log("data", data);
-
-    try {
-      const res = await fetch("http://localhost:8080/api/items/add-item", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          itemColor: data.itemColor,
-          itemTitle: data.itemTitle,
-          itemSize: data.itemSize,
-          itemType: data.itemType,
-          materialName: data.materialName,
-          sellerName:
-            item.itemIs === "ourProduct" ? "entgraItems" : data.sellerName,
-          buyingPrice: item.itemIs === "ourProduct" ? 0 : data.buyingPrice,
-          profitPercentage:
-            item.itemIs === "ourProduct" ? 0 : data.profitPercentage,
-          sellingPrice:
-            item.itemIs === "ourProduct"
-              ? data.sellingPrice
-              : getInputs.displayPrice,
-          description: data.description,
-          code: code,
-          numberOfItems: data.numberOfItems,
-        }),
-      });
-      if (res.ok) {
-        setLoad(false);
-        message.open({
-          type: "success",
-          content: "Registered successfully!",
-        });
-      }
-      if (!res.ok) {
-        setLoad(false);
-        message.open({
-          type: "error",
-          content: "Something went wrong!",
-        });
-      }
-    } catch (error) {
-      console.log("trycatchError:", error);
-      setLoad(false);
-    }
+    postItem({
+      itemColor: data.itemColor,
+      itemTitle: data.itemTitle,
+      itemSize: data.itemSize,
+      itemType: data.itemType,
+      materialName: data.materialName,
+      sellerName:
+        item.itemIs === "ourProduct" ? "entgraItems" : data.sellerName,
+      buyingPrice: item.itemIs === "ourProduct" ? 0 : data.buyingPrice,
+      profitPercentage:
+        item.itemIs === "ourProduct" ? 0 : data.profitPercentage,
+      sellingPrice:
+        item.itemIs === "ourProduct"
+          ? data.sellingPrice
+          : getInputs.displayPrice,
+      description: data.description,
+      code: code,
+      numberOfItems: data.numberOfItems,
+    });
   };
+  if (isSuccess) {
+    message.open({
+      type: "success",
+      content: "Item added successfully!",
+    });
+  }
+  if (isError) {
+    message.open({
+      type: "error",
+      content: "Something went wrong!",
+    });
+  }
 
   return (
     <div className="addItem">
@@ -359,7 +345,7 @@ const AddFormItems = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button loading={load} type="primary" htmlType="submit">
+              <Button loading={isLoading} type="primary" htmlType="submit">
                 Add Item
               </Button>
             </Form.Item>

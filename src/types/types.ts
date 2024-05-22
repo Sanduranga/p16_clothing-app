@@ -37,12 +37,13 @@ export interface itemTypes {
   sellerName: string;
   materialName: string;
   itemTitle: string;
-  itemIs: string;
+  itemIs?: string;
   itemColor: string;
   itemSize: string;
   description: string;
   itemType: string;
-  sellingType: string;
+  sellingType?: string;
+  code: string;
   buyingPrice: number;
   sellingPrice: number;
   salePrice?: number;

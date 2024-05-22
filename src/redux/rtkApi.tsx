@@ -13,7 +13,16 @@ export const appApi = createApi({
     getOneItem: builder.query<itemTypes, string>({
       query: (id) => `items/get-item?id=${id}`,
     }),
+    postItem: builder.mutation<void, itemTypes>({
+      query: (data) => ({
+        url: "items/add-item",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["refresh"],
+    }),
   }),
 });
 
-export const { useGetAllItemsQuery, useGetOneItemQuery } = appApi;
+export const { useGetAllItemsQuery, useGetOneItemQuery, usePostItemMutation } =
+  appApi;
