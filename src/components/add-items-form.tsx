@@ -1,61 +1,29 @@
-import { Button, Col, Form, Input, Row, Select, message } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Typography,
+  message,
+} from "antd";
 import { itemTypes } from "../types/types";
-import { useState } from "react";
-import { CodeGenerater } from "../lib/utill";
+import { useEffect, useRef, useState } from "react";
+import { CodeGenerater, SalePriceCal } from "../lib/utill";
 
 const AddFormItems = () => {
+  const firstRender = useRef(true);
   const [load, setLoad] = useState(false);
+  const [getInputs, setGetInputs] = useState({
+    buyingPrice: 0,
+    sellingPrice: 0,
+    profitPercentage: 0,
+    displayPrice: 0,
+  });
+  console.log(getInputs);
 
-  const handleSubmit = async (data: itemTypes) => {
-    setLoad(true);
-    const code = CodeGenerater(
-      data.name,
-      data.itemType,
-      data.itemColor,
-      data.itemSize,
-      data.materialName
-    );
-
-    const res = await fetch("http://localhost:8080/api/items/add-item", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        itemColor: data.itemColor,
-        itemIs: data.itemIs,
-        itemTitle: data.itemTitle,
-        itemSize: data.itemSize,
-        itemType: data.itemType,
-        materialName: data.materialName,
-        buyingPrice: data.buyingPrice,
-        name: data.name,
-        normalPercentage: data.normalPercentage,
-        salePercentage: data.salePercentage,
-        sellingType: data.sellingType,
-        sellingPrice: data.sellingPrice,
-        stockClearingPrice: data.stockClearingPrice,
-        description: data.description,
-        code: code,
-        numberOfItems: data.numberOfItems,
-      }),
-    });
-    if (res.ok) {
-      setLoad(false);
-      message.open({
-        type: "success",
-        content: "Registered successfully!",
-      });
-    }
-    if (!res.ok) {
-      setLoad(false);
-      message.open({
-        type: "error",
-        content: "Something went wrong!",
-      });
-    }
-  };
-  const [item, setItem] = useState<Partial<itemTypes>>({});
+  const [item, setItem] = useState({ itemIs: "" });
   const handleSelectChange = (value: string, name: string) => {
     setItem({
       ...item,
@@ -63,24 +31,81 @@ const AddFormItems = () => {
     });
   };
 
+  useEffect(() => {
+    if (firstRender.current === true) {
+      firstRender.current = false;
+      return;
+    }
+    const aa = SalePriceCal(getInputs.buyingPrice, getInputs.profitPercentage);
+    if (typeof aa === "number") {
+      setGetInputs((prevInputs) => ({ ...prevInputs, displayPrice: aa }));
+    } else {
+      console.error("displayPriceCal did not return a number");
+    }
+  }, [getInputs.profitPercentage, getInputs.buyingPrice]);
+
+  const handleSubmit = async (data: itemTypes) => {
+    setLoad(true);
+    const code = CodeGenerater(
+      data.sellerName,
+      data.itemType,
+      data.itemColor,
+      data.itemSize,
+      data.materialName
+    );
+    console.log("data", data);
+
+    try {
+      const res = await fetch("http://localhost:8080/api/items/add-item", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          itemColor: data.itemColor,
+          itemTitle: data.itemTitle,
+          itemSize: data.itemSize,
+          itemType: data.itemType,
+          materialName: data.materialName,
+          sellerName:
+            item.itemIs === "ourProduct" ? "entgraItems" : data.sellerName,
+          buyingPrice: item.itemIs === "ourProduct" ? 0 : data.buyingPrice,
+          profitPercentage:
+            item.itemIs === "ourProduct" ? 0 : data.profitPercentage,
+          sellingPrice:
+            item.itemIs === "ourProduct"
+              ? data.sellingPrice
+              : getInputs.displayPrice,
+          description: data.description,
+          code: code,
+          numberOfItems: data.numberOfItems,
+        }),
+      });
+      if (res.ok) {
+        setLoad(false);
+        message.open({
+          type: "success",
+          content: "Registered successfully!",
+        });
+      }
+      if (!res.ok) {
+        setLoad(false);
+        message.open({
+          type: "error",
+          content: "Something went wrong!",
+        });
+      }
+    } catch (error) {
+      console.log("trycatchError:", error);
+      setLoad(false);
+    }
+  };
+
   return (
     <div className="addItem">
       <Form layout="vertical" onFinish={handleSubmit}>
         <Row gutter={{ sm: 20 }}>
           <Col md={{ span: 8 }} sm={12} xs={24}>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter your full name",
-                },
-              ]}
-              label="Your name"
-              name="name"
-            >
-              <Input />
-            </Form.Item>
-
             <Form.Item
               label="Item is"
               name="itemIs"
@@ -103,125 +128,121 @@ const AddFormItems = () => {
                 ]}
               />
             </Form.Item>
-            {item.itemIs === "anotherSeller" && (
+
+            {item.itemIs === "anotherSellerProduct" && (
               <>
-                <Form.Item label="Buying Price" name="buyingPrice">
-                  <Input type="number" />
+                <Form.Item
+                  label="Seller Name"
+                  name="sellerName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter buying price",
+                    },
+                  ]}
+                >
+                  <Input name="sellerName" variant="filled" />
+                </Form.Item>
+                <Form.Item
+                  label="Buying Price"
+                  name="buyingPrice"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter buying price",
+                    },
+                  ]}
+                >
+                  <Input
+                    name="buyingPrice"
+                    onChange={(e) =>
+                      setGetInputs({
+                        ...getInputs,
+                        [e.target.name]: e.target.value,
+                      })
+                    }
+                    variant="filled"
+                    style={{ borderColor: "#1d914c" }}
+                    type="number"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Add percentage"
+                  name="profitPercentage"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter percentage",
+                    },
+                  ]}
+                >
+                  <Input
+                    name="profitPercentage"
+                    onChange={(e) =>
+                      setGetInputs({
+                        ...getInputs,
+                        [e.target.name]: e.target.value,
+                      })
+                    }
+                    variant="filled"
+                    style={{ borderColor: "#1d914c" }}
+                    type="number"
+                  />
                 </Form.Item>
               </>
             )}
-            <Form.Item
-              label="Types of selling"
-              name="sellingType"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select one",
-                },
-              ]}
-            >
-              <Select
-                onChange={(value) => handleSelectChange(value, "sellingType")}
-                style={{ width: 250 }}
-                options={[
-                  { value: "normal", label: "Normal" },
-                  { value: "sale", label: "Sale" },
-                  { value: "stockClearing", label: "Stock clearing" },
-                ]}
-              />
-            </Form.Item>
-            {item.sellingType === "normal" &&
-              item.itemIs === "anotherSellerProduct" && (
-                <>
-                  <Form.Item
-                    label="Buying Price"
-                    name="buyingPrice"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter stock buying price",
-                      },
-                    ]}
-                  >
-                    <Input
-                      variant="filled"
-                      style={{ borderColor: "#1d914c" }}
-                      type="number"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Add Percentage"
-                    name="normalPercentage"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please add percentage",
-                      },
-                    ]}
-                  >
-                    <Input
-                      variant="filled"
-                      style={{ borderColor: "#1d914c" }}
-                      type="number"
-                    />
-                  </Form.Item>
-                </>
-              )}
-            {item.sellingType === "sale" && (
-              <Form.Item
-                label="Sale Percentage"
-                name="salePercentage"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter sale percentage",
-                  },
-                ]}
-              >
-                <Input
-                  variant="filled"
-                  style={{ borderColor: "#1d914c" }}
-                  type="number"
-                />
-              </Form.Item>
+
+            {item.itemIs === "ourProduct" && (
+              <>
+                <Form.Item
+                  label="Seller Name"
+                  name="sellerName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter buying price",
+                    },
+                  ]}
+                >
+                  <Input
+                    defaultValue={"Entgra items"}
+                    name="sellerName"
+                    variant="filled"
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Selling Price"
+                  name="sellingPrice"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter selling price",
+                    },
+                  ]}
+                >
+                  <Input
+                    name="sellingPrice"
+                    onChange={(e) =>
+                      setGetInputs({
+                        ...getInputs,
+                        [e.target.name]: e.target.value,
+                      })
+                    }
+                    variant="filled"
+                    style={{ borderColor: "#1d914c" }}
+                    type="number"
+                  />
+                </Form.Item>
+              </>
             )}
-            {item.sellingType === "stockClearing" && (
-              <Form.Item
-                label="Stock Clearing Price"
-                name="stockClearingPrice"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter stock clearing price",
-                  },
-                ]}
-              >
-                <Input
-                  variant="filled"
-                  style={{ borderColor: "#1d914c" }}
-                  type="number"
-                />
-              </Form.Item>
-            )}
-            {item.sellingType === "normal" && item.itemIs === "ourProduct" && (
-              <Form.Item
-                label="Selling Price"
-                name="sellingPrice"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter selling price",
-                  },
-                ]}
-              >
-                <Input
-                  variant="filled"
-                  style={{ borderColor: "#1d914c" }}
-                  type="number"
-                />
-              </Form.Item>
-            )}
+            <Typography.Title level={4}>
+              Display price:{" "}
+              {item.itemIs === "ourProduct"
+                ? getInputs.sellingPrice
+                : getInputs.displayPrice}
+            </Typography.Title>
           </Col>
+
           <Col md={{ span: 12, offset: 1 }} sm={12} xs={24}>
             <Form.Item
               rules={[

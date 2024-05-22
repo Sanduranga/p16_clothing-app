@@ -1,7 +1,8 @@
-import { Card, Image, List, Typography } from "antd";
+import { Button, Card, Image, List, Rate, Typography } from "antd";
 import { useGetAllItemsQuery } from "../redux/rtkApi";
 import Login from "./login";
 import { useNavigate } from "react-router-dom";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 const Home: React.FC = () => {
   const { data, isLoading } = useGetAllItemsQuery();
@@ -17,14 +18,21 @@ const Home: React.FC = () => {
               className="itemCard"
               title={products.itemTitle}
               key={index}
+              actions={[
+                <Rate allowHalf disabled value={4} />,
+                <ShoppingCartOutlined />,
+                <Button onClick={() => navigate(`/set-discount/${"1"}`)}>
+                  Set discount
+                </Button>,
+              ]}
               cover={
                 <Image
                   preview={false}
                   className="itemCardImage"
                   src={"bag.jpg"}
+                  onClick={() => navigate(`/clicked-item/${"1"}`)}
                 />
               }
-              onClick={() => navigate(`/clicked-item/${"3"}`)}
               loading={isLoading}
             >
               <Card.Meta

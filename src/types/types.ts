@@ -34,19 +34,20 @@ export interface userlogingTypes {
 }
 
 export interface itemTypes {
-  name: string;
+  sellerName: string;
   materialName: string;
   itemTitle: string;
-  buyingPrice: number;
-  sellingType: string;
-  sellingPrice: number;
-  itemType: string;
-  normalPercentage: number;
-  salePercentage?: number;
-  stockClearingPrice?: number;
   itemIs: string;
   itemColor: string;
   itemSize: string;
   description: string;
+  itemType: string;
+  sellingType: string;
+  buyingPrice: number;
+  sellingPrice: number;
+  salePrice?: number;
+  profitPercentage: number;
+  salePercentage?: number;
+  stockClearingPrice?: number;
   numberOfItems: number;
 }
