@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AddItems from "./pages/add-items.tsx";
 import ClickedItemPage from "./pages/clicked-item.tsx";
 import { ConfigProvider } from "antd";
+import SetDiscount from "./pages/set-discount.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/clicked-item/:code",
     element: <ClickedItemPage />,
+  },
+  {
+    path: "/set-discount/:code",
+    element: <SetDiscount />,
   },
 ]);
 

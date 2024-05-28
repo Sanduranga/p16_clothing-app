@@ -30,7 +30,7 @@ const Home: React.FC = () => {
                   preview={false}
                   className="itemCardImage"
                   src={"bag.jpg"}
-                  onClick={() => navigate(`/clicked-item/${"1"}`)}
+                  onClick={() => navigate(`/clicked-item/${products.id}`)}
                 />
               }
               loading={isLoading}

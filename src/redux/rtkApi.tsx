@@ -21,8 +21,25 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh"],
     }),
+    deleteTodo: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `items/delete-item?${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["refresh"],
+    }),
+    updateTodo: builder.mutation<void, itemTypes>({
+      query: ({ id, ...rest }) => ({
+        url: `items/update-item?${id}`,
+        method: "PUT",
+        body: rest,
+      }),
+      invalidatesTags: ["refresh"],
+    }),
   }),
 });
+
+
 
 export const { useGetAllItemsQuery, useGetOneItemQuery, usePostItemMutation } =
   appApi;
