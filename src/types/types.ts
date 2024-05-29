@@ -43,13 +43,33 @@ export interface itemTypes {
   itemSize: string;
   description: string;
   itemType: string;
-  sellingType?: string;
   code: string;
   buyingPrice: number;
   sellingPrice: number;
   salePrice?: number;
-  profitPercentage: number;
+  profitPercentage?: number;
+  numberOfItems: number;
+  status: string;
+  sellingType?: string;
+  salePercentage?: number;
+}
+
+export interface discountItemsTypes {
+  id?: number;
+  sellerName: string;
+  materialName: string;
+  itemTitle: string;
+  itemIs?: string;
+  itemColor: string;
+  itemSize: string;
+  description: string;
+  itemType: string;
+  code: string;
+  buyingPrice: number;
+  sellingPrice?: number;
+  salePrice?: number;
+  numberOfItems: number;
+  status: string;
   salePercentage?: number;
   stockClearingPrice?: number;
-  numberOfItems: number;
 }

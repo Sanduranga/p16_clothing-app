@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { itemTypes } from "../types/types";
+import { discountItemsTypes, itemTypes } from "../types/types";
 
 export const appApi = createApi({
   reducerPath: "appApis",
@@ -21,14 +21,30 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh"],
     }),
-    deleteTodo: builder.mutation<void, string>({
+    postSaleItem: builder.mutation<void, discountItemsTypes>({
+      query: (data) => ({
+        url: "sale-items/add-item",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["refresh"],
+    }),
+    postStockClearItem: builder.mutation<void, discountItemsTypes>({
+      query: (data) => ({
+        url: "stock-clear-items/add-item",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["refresh"],
+    }),
+    deleteItem: builder.mutation<void, string>({
       query: (id) => ({
-        url: `items/delete-item?${id}`,
+        url: `items/delete-item?id=${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["refresh"],
     }),
-    updateTodo: builder.mutation<void, itemTypes>({
+    updateItem: builder.mutation<void, itemTypes>({
       query: ({ id, ...rest }) => ({
         url: `items/update-item?${id}`,
         method: "PUT",
@@ -39,7 +55,11 @@ export const appApi = createApi({
   }),
 });
 
-
-
-export const { useGetAllItemsQuery, useGetOneItemQuery, usePostItemMutation } =
-  appApi;
+export const {
+  useGetAllItemsQuery,
+  useGetOneItemQuery,
+  usePostItemMutation,
+  usePostSaleItemMutation,
+  usePostStockClearItemMutation,
+  useDeleteItemMutation,
+} = appApi;

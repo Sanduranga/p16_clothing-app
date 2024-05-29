@@ -7,6 +7,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 const Home: React.FC = () => {
   const { data, isLoading } = useGetAllItemsQuery();
   const navigate = useNavigate();
+
   return (
     <div>
       <List
@@ -21,9 +22,12 @@ const Home: React.FC = () => {
               actions={[
                 <Rate allowHalf disabled value={4} />,
                 <ShoppingCartOutlined />,
-                <Button onClick={() => navigate(`/set-discount/${"1"}`)}>
+                <Button
+                  onClick={() => navigate(`/set-discount/${products.id}`)}
+                >
                   Set discount
                 </Button>,
+                <Button onClick={() => navigate(`#`)}>Edit</Button>,
               ]}
               cover={
                 <Image

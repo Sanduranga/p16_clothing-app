@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { itemTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
-import { CodeGenerater, SalePriceCal } from "../lib/utill";
+import { CodeGenerater, normalStorePriceCal } from "../lib/utill";
 import { usePostItemMutation } from "../redux/rtkApi";
 
 const AddFormItems = () => {
@@ -21,8 +21,6 @@ const AddFormItems = () => {
     profitPercentage: 0,
     displayPrice: 0,
   });
-  console.log(getInputs);
-
   const [item, setItem] = useState({ itemIs: "" });
   const handleSelectChange = (value: string, name: string) => {
     setItem({
@@ -30,21 +28,24 @@ const AddFormItems = () => {
       [name]: value,
     });
   };
+  const [postItem, { isLoading, isSuccess, isError }] = usePostItemMutation();
 
   useEffect(() => {
     if (firstRender.current === true) {
       firstRender.current = false;
       return;
     }
-    const aa = SalePriceCal(getInputs.buyingPrice, getInputs.profitPercentage);
+    const aa = normalStorePriceCal(
+      getInputs.buyingPrice,
+      getInputs.profitPercentage
+    );
+
     if (typeof aa === "number") {
       setGetInputs((prevInputs) => ({ ...prevInputs, displayPrice: aa }));
     } else {
       console.error("displayPriceCal did not return a number");
     }
   }, [getInputs.profitPercentage, getInputs.buyingPrice]);
-
-  const [postItem, { isLoading, isSuccess, isError }] = usePostItemMutation();
 
   const handleSubmit = async (data: itemTypes) => {
     const code = CodeGenerater(
@@ -54,6 +55,7 @@ const AddFormItems = () => {
       data.itemSize,
       data.materialName
     );
+
     postItem({
       itemColor: data.itemColor,
       itemTitle: data.itemTitle,
@@ -72,8 +74,10 @@ const AddFormItems = () => {
       description: data.description,
       code: code,
       numberOfItems: data.numberOfItems,
+      status: "normalStore",
     });
   };
+
   if (isSuccess) {
     message.open({
       type: "success",
@@ -144,7 +148,7 @@ const AddFormItems = () => {
                     onChange={(e) =>
                       setGetInputs({
                         ...getInputs,
-                        [e.target.name]: e.target.value,
+                        [e.target.name]: Number(e.target.value),
                       })
                     }
                     variant="filled"
@@ -167,7 +171,7 @@ const AddFormItems = () => {
                     onChange={(e) =>
                       setGetInputs({
                         ...getInputs,
-                        [e.target.name]: e.target.value,
+                        [e.target.name]: Number(e.target.value),
                       })
                     }
                     variant="filled"
@@ -211,7 +215,7 @@ const AddFormItems = () => {
                     onChange={(e) =>
                       setGetInputs({
                         ...getInputs,
-                        [e.target.name]: e.target.value,
+                        [e.target.name]: Number(e.target.value),
                       })
                     }
                     variant="filled"

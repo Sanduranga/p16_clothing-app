@@ -1,121 +1,157 @@
-import { Col, Form, Input, Row, Select, Spin, Typography, message } from "antd";
-import { CodeGenerater, SalePriceCal } from "../lib/utill";
-import { itemTypes } from "../types/types";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Spin,
+  Typography,
+  message,
+} from "antd";
+import { saleStorePriceCal } from "../lib/utill";
+import { discountItemsTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetOneItemQuery } from "../redux/rtkApi";
+import {
+  useDeleteItemMutation,
+  useGetOneItemQuery,
+  usePostSaleItemMutation,
+  usePostStockClearItemMutation,
+} from "../redux/rtkApi";
 
 const SetDiscountForm = () => {
   const firstRender = useRef(true);
-  const [load, setLoad] = useState(false);
   const [getInputs, setGetInputs] = useState({
-    buyingPrice: 0,
-    sellingPrice: 0,
     salePercentage: 0,
     salePrice: 0,
-    normalPercentage: 0,
+    stockClearingPrice: 0,
   });
-  console.log(getInputs);
-  const [item, setItem] = useState({ sellingType: "", itemIs: "" });
+
+  const { code } = useParams<{ code: "string" }>();
+  const {
+    data,
+    isLoading,
+    error,
+    isSuccess: isGetSuccess,
+  } = useGetOneItemQuery(code!, {
+    skip: !code,
+  });
+  const [
+    postSaleItem,
+    { isLoading: IsLoadingSaleItem, isSuccess: IsSuccessSaleItem },
+  ] = usePostSaleItemMutation();
+  const [
+    postStockClearItem,
+    { isLoading: IsLoadingStockItem, isSuccess: IsSuccessStockItem },
+  ] = usePostStockClearItemMutation();
+  const [deleteItem, { isSuccess: deletedOk, error: deleteError }] =
+    useDeleteItemMutation();
+
+  const [item, setItem] = useState({ sellingType: "" });
   const handleSelectChange = (value: string, name: string) => {
     setItem({
       ...item,
       [name]: value,
     });
   };
-  console.log(item);
-  console.log(firstRender);
 
   useEffect(() => {
-    if (firstRender.current === true) {
+    if (firstRender.current) {
       firstRender.current = false;
       return;
     }
-    const aa = SalePriceCal(
-      getInputs.sellingPrice,
-      getInputs.buyingPrice,
-      getInputs.salePercentage,
-      getInputs.normalPercentage,
-      item.sellingType,
-      item.itemIs
-    );
-    if (typeof aa === "number") {
+    if (isGetSuccess) {
+      const aa = saleStorePriceCal(getInputs.salePercentage, data.sellingPrice);
       setGetInputs((prevInputs) => ({ ...prevInputs, salePrice: aa }));
-    } else {
-      console.error("SalePriceCal did not return a number");
     }
+  }, [getInputs.salePercentage]);
 
-    console.log(aa);
-  }, [
-    getInputs.sellingPrice,
-    getInputs.buyingPrice,
-    getInputs.salePercentage,
-    getInputs.normalPercentage,
-    item.sellingType,
-    item.itemIs,
-  ]);
-
-  const handleSubmit = async (data: itemTypes) => {
-    setLoad(true);
-    const code = CodeGenerater(
-      data.name,
-      data.itemType,
-      data.itemColor,
-      data.itemSize,
-      data.materialName
-    );
-
-    const res = await fetch("http://localhost:8080/api/items/add-item", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        itemColor: data.itemColor,
-        itemIs: data.itemIs,
-        itemTitle: data.itemTitle,
-        itemSize: data.itemSize,
-        itemType: data.itemType,
-        materialName: data.materialName,
-        buyingPrice: data.buyingPrice,
-        name: data.name,
-        normalPercentage: data.normalPercentage,
-        salePercentage: data.salePercentage,
-        sellingType: data.sellingType,
-        sellingPrice: data.sellingPrice,
-        // getInputs: getInputs,
-        stockClearingPrice: data.stockClearingPrice,
-        description: data.description,
-        code: code,
-        numberOfItems: data.numberOfItems,
-      }),
+  if (deleteError) {
+    message.open({
+      type: "error",
+      content: "Item deleted failed!",
     });
-    if (res.ok) {
-      setLoad(false);
-      message.open({
-        type: "success",
-        content: "Registered successfully!",
-      });
-    }
-    if (!res.ok) {
-      setLoad(false);
-      message.open({
-        type: "error",
-        content: "Something went wrong!",
-      });
-    }
-  };
-
-  const { code } = useParams<{ code: "string" }>();
-  const { data, isLoading, error } = useGetOneItemQuery(code!, {
-    skip: !code,
-  });
+  }
   if (error) {
     message.open({
       type: "error",
       content: "Item getting error!",
     });
   }
+  if (deletedOk) {
+    message.open({
+      type: "success",
+      content: "Item delete successfully!",
+    });
+  }
+  if (IsSuccessSaleItem) {
+    message.open({
+      type: "success",
+      content: "Added successfully!",
+    });
+  }
+  if (IsSuccessStockItem) {
+    message.open({
+      type: "success",
+      content: "Added successfully!",
+    });
+  }
+
+  const handleSubmit = (submitData: discountItemsTypes) => {
+    if (isGetSuccess) {
+      if (getInputs.salePrice < data.buyingPrice) {
+        message.open({
+          type: "error",
+          content: "Sale price should be greater than buying price!",
+        });
+        return;
+      }
+      if (submitData.status === "sale") {
+        postSaleItem({
+          id: data.id,
+          itemColor: data.itemColor,
+          itemSize: data.itemSize,
+          itemType: data.itemType,
+          itemTitle: data.itemTitle,
+          sellerName: data.sellerName,
+          materialName: data.materialName,
+          buyingPrice: data.buyingPrice,
+          salePercentage: getInputs.salePercentage,
+          sellingPrice: data.sellingPrice,
+          salePrice: getInputs.salePrice,
+          description: data.description,
+          status: submitData.status,
+          code: data.code,
+          numberOfItems: data.numberOfItems,
+        });
+      } else {
+        postStockClearItem({
+          id: data.id,
+          itemColor: data.itemColor,
+          itemSize: data.itemSize,
+          itemType: data.itemType,
+          itemTitle: data.itemTitle,
+          sellerName: data.sellerName,
+          materialName: data.materialName,
+          buyingPrice: data.buyingPrice,
+          stockClearingPrice: getInputs.stockClearingPrice,
+          sellingPrice: data.sellingPrice,
+          description: data.description,
+          status: submitData.status,
+          code: data.code,
+          numberOfItems: data.numberOfItems,
+        });
+      }
+      console.log("dele");
+      deleteItem(data.id as any);
+      setGetInputs({
+        salePercentage: 0,
+        salePrice: 0,
+        stockClearingPrice: 0,
+      });
+    }
+  };
 
   return (
     <>
@@ -130,11 +166,16 @@ const SetDiscountForm = () => {
             <Form layout="vertical" onFinish={handleSubmit}>
               <Row gutter={{ sm: 20 }}>
                 <Col md={{ span: 8 }} sm={12} xs={24}>
-                  {item.itemIs === "anotherSeller" ? (
+                  {isGetSuccess && data.buyingPrice > 0 ? (
                     <>
-                      <Typography>Item is: {data?.itemIs}</Typography>
+                      <Typography>
+                        Item is: {"Another seller product"}
+                      </Typography>
                       <Typography>
                         Buying price is: {data?.buyingPrice}
+                      </Typography>
+                      <Typography>
+                        Present price is: {data?.sellingPrice}
                       </Typography>
                     </>
                   ) : (
@@ -148,7 +189,7 @@ const SetDiscountForm = () => {
 
                   <Form.Item
                     label="Types of selling"
-                    name="sellingType"
+                    name="status"
                     rules={[
                       {
                         required: true,
@@ -190,7 +231,7 @@ const SetDiscountForm = () => {
                           onChange={(e) =>
                             setGetInputs({
                               ...getInputs,
-                              [e.target.name]: e.target.value,
+                              [e.target.name]: Number(e.target.value),
                             })
                           }
                         />
@@ -211,16 +252,34 @@ const SetDiscountForm = () => {
                       <Input
                         variant="filled"
                         style={{ borderColor: "#1d914c" }}
+                        name="stockClearingPrice"
                         type="number"
+                        onChange={(e) =>
+                          setGetInputs({
+                            ...getInputs,
+                            [e.target.name]: Number(e.target.value),
+                          })
+                        }
                       />
                     </Form.Item>
                   )}
 
                   <Typography.Title level={4}>
-                    Display price: {getInputs.salePrice}
+                    Display price:{" "}
+                    {item.sellingType === "sale"
+                      ? getInputs.salePrice
+                      : getInputs.stockClearingPrice}
                   </Typography.Title>
                 </Col>
               </Row>
+              <Form.Item>
+                <Button
+                  loading={IsLoadingSaleItem || IsLoadingStockItem}
+                  htmlType="submit"
+                >
+                  Submit
+                </Button>
+              </Form.Item>
             </Form>
           </Col>
         </Row>

@@ -23,8 +23,19 @@ export function CodeGenerater(
   return code as string;
 }
 
-export function SalePriceCal(buyingPrice: number, profitPercentage: number) {
-  const total = buyingPrice - (buyingPrice * profitPercentage) / 100;
+export function normalStorePriceCal(
+  buyingPrice: number,
+  profitPercentage: number
+) {
+  const total = buyingPrice + (buyingPrice * profitPercentage) / 100;
+  return total as number;
+}
+
+export function saleStorePriceCal(
+  salePercentage: number,
+  sellingPrice: number
+) {
+  const total = sellingPrice - (sellingPrice * salePercentage) / 100;
   return total;
 }
 
