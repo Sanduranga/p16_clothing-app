@@ -37,7 +37,7 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh"],
     }),
-    deleteItem: builder.mutation<void, string>({
+    deleteItem: builder.mutation<void, number>({
       query: (id) => ({
         url: `items/delete-item?id=${id}`,
         method: "DELETE",

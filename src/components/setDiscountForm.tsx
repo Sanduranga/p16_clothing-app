@@ -85,17 +85,21 @@ const SetDiscountForm = () => {
       content: "Item delete successfully!",
     });
   }
-  if (IsSuccessSaleItem) {
-    message.open({
-      type: "success",
-      content: "Added successfully!",
-    });
-  }
-  if (IsSuccessStockItem) {
-    message.open({
-      type: "success",
-      content: "Added successfully!",
-    });
+  if (isGetSuccess) {
+    if (IsSuccessSaleItem) {
+      message.open({
+        type: "success",
+        content: "Added successfully!",
+      });
+      deleteItem(data.id);
+    }
+    if (IsSuccessStockItem) {
+      message.open({
+        type: "success",
+        content: "Added successfully!",
+      });
+      deleteItem(data.id);
+    }
   }
 
   const handleSubmit = (submitData: discountItemsTypes) => {
@@ -143,13 +147,11 @@ const SetDiscountForm = () => {
           numberOfItems: data.numberOfItems,
         });
       }
-      console.log("dele");
-      deleteItem(data.id as any);
-      setGetInputs({
-        salePercentage: 0,
-        salePrice: 0,
-        stockClearingPrice: 0,
-      });
+      // setGetInputs({
+      //   salePercentage: 0,
+      //   salePrice: 0,
+      //   stockClearingPrice: 0,
+      // });
     }
   };
 

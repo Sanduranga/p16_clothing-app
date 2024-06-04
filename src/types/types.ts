@@ -34,7 +34,7 @@ export interface userlogingTypes {
 }
 
 export interface itemTypes {
-  id?: number;
+  id: number;
   sellerName: string;
   materialName: string;
   itemTitle: string;
