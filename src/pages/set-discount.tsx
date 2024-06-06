@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/nav-bar";
 import Login from "./login";
-import SetDiscountForm from "../components/setDiscountForm";
+import SetDiscountForm from "../components/set-discount-form";
 
 const SetDiscount: React.FC = () => {
   return (

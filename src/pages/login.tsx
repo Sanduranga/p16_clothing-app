@@ -3,7 +3,7 @@ import { Button, Col, Drawer, Space, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { openDrawer, signInForm } from "../redux/slices/appActions";
-import LoginForm from "../components/loginForm";
+import LoginForm from "../components/login-form";
 import SigninForm from "../components/signinForm";
 
 const Login: React.FC = () => {

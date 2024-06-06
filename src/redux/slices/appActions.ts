@@ -1,5 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { appControllerSliceTypes } from "../../types/types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+export interface appControllerSliceTypes {
+  drawer: boolean;
+  signInForm: boolean;
+  loggedUser: {
+    name: string;
+    email: string;
+    loggedIn: boolean;
+  };
+}
 
 const initialState: appControllerSliceTypes = {
   drawer: false,
@@ -18,13 +27,13 @@ const appControllerSlice = createSlice({
     openDrawer: (state) => {
       state.drawer = !state.drawer;
     },
-    signInForm: (state, action) => {
+    signInForm: (state, action: PayloadAction<boolean>) => {
       state.signInForm = action.payload;
     },
-    setUserName: (state, action) => {
+    setUserName: (state, action: PayloadAction<string>) => {
       state.loggedUser.name = action.payload;
     },
-    loggedIn: (state, action) => {
+    loggedIn: (state, action: PayloadAction<boolean>) => {
       state.loggedUser.loggedIn = action.payload;
     },
   },

@@ -11,15 +11,7 @@ export interface allProductsTypes {
   thumbnail: string;
   images: [];
 }
-export interface appControllerSliceTypes {
-  drawer: boolean;
-  signInForm: boolean;
-  loggedUser: {
-    name: string;
-    email: string;
-    loggedIn: boolean;
-  };
-}
+
 export interface getDatatypes {
   products: itemTypes[];
   limite: number;
@@ -34,6 +26,27 @@ export interface userlogingTypes {
 }
 
 export interface itemTypes {
+  id?: number;
+  sellerName: string;
+  materialName: string;
+  itemTitle: string;
+  itemIs?: string;
+  itemColor: string;
+  itemSize: string;
+  description: string;
+  itemType: string;
+  code: string;
+  buyingPrice: number;
+  sellingPrice: number;
+  salePrice?: number;
+  profitPercentage?: number;
+  numberOfItems: number;
+  status: string;
+  sellingType?: string;
+  salePercentage?: number;
+}
+
+export interface itemTypes2 {
   id: number;
   sellerName: string;
   materialName: string;
@@ -72,4 +85,10 @@ export interface discountItemsTypes {
   status: string;
   salePercentage?: number;
   stockClearingPrice?: number;
+}
+
+export interface allDataObject {
+  itemsData: itemTypes2[];
+  saleItemsData: itemTypes2[];
+  stockClearItemsData: itemTypes2[];
 }

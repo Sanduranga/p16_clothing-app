@@ -9,27 +9,35 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const onLogin = async (data: userlogingTypes) => {
-    setLoad(true);
-    const res = await fetch(
-      `http://localhost:8080/api/users/get-user?email=${data.email}`
-    );
-    const loggedUser = await res.json();
+    try {
+      setLoad(true);
+      const res = await fetch(
+        `http://localhost:8080/api/users/get-user?email=${data.email}`
+      );
+      const loggedUser = await res.json();
 
-    if (loggedUser.name) {
-      setLoad(false);
-      dispatch(openDrawer());
-      dispatch(loggedIn(true));
-      dispatch(setUserName(loggedUser.name));
-      message.open({
-        type: "success",
-        content: "Logged in successfully!",
-      });
-    }
-    if (!res.ok) {
+      if (loggedUser.name) {
+        setLoad(false);
+        dispatch(openDrawer());
+        dispatch(loggedIn(true));
+        dispatch(setUserName(loggedUser.name));
+        message.open({
+          type: "success",
+          content: "Logged in successfully!",
+        });
+      }
+      if (!res.ok) {
+        setLoad(false);
+        message.open({
+          type: "error",
+          content: "Something went wrong!",
+        });
+      }
+    } catch (error) {
       setLoad(false);
       message.open({
         type: "error",
-        content: "Something went wrong!",
+        content: "Loging failed!",
       });
     }
   };

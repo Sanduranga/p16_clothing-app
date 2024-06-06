@@ -109,6 +109,16 @@ const Navbar = () => {
             Add items
           </Typography.Title>
         </Link>
+        <Link style={{ textDecoration: "none" }} to={"/my-store"}>
+          <Typography.Title
+            level={5}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            My store
+          </Typography.Title>
+        </Link>
 
         <Typography.Title
           onClick={handlelogin}

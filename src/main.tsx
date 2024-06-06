@@ -9,6 +9,7 @@ import AddItems from "./pages/add-items.tsx";
 import ClickedItemPage from "./pages/clicked-item.tsx";
 import { ConfigProvider } from "antd";
 import SetDiscount from "./pages/set-discount.tsx";
+import MyStore from "./pages/my-store.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/set-discount/:code",
     element: <SetDiscount />,
+  },
+  {
+    path: "/my-store",
+    element: <MyStore />,
   },
 ]);
 

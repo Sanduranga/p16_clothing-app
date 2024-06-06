@@ -76,20 +76,19 @@ const AddFormItems = () => {
       numberOfItems: data.numberOfItems,
       status: "normalStore",
     });
+    if (isSuccess) {
+      await message.open({
+        type: "success",
+        content: "Item added successfully!",
+      });
+    }
+    if (isError) {
+      await message.open({
+        type: "error",
+        content: "Something went wrong!",
+      });
+    }
   };
-
-  if (isSuccess) {
-    message.open({
-      type: "success",
-      content: "Item added successfully!",
-    });
-  }
-  if (isError) {
-    message.open({
-      type: "error",
-      content: "Something went wrong!",
-    });
-  }
 
   return (
     <div className="addItem">
