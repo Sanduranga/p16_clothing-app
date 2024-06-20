@@ -10,8 +10,11 @@ import {
 } from "antd";
 import { itemTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
-import { CodeGenerater, normalStorePriceCal } from "../lib/utill";
-import { usePostItemMutation } from "../redux/rtkApi";
+import { CodeGenerater, normalStorePriceCal } from "../utils/utill";
+import {
+  usePostItemMutation,
+  useResetMutationStateMutation,
+} from "../redux/rtkApi";
 
 const AddFormItems = () => {
   const firstRender = useRef(true);
@@ -29,6 +32,7 @@ const AddFormItems = () => {
     });
   };
   const [postItem, { isLoading, isSuccess, isError }] = usePostItemMutation();
+  const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
     if (firstRender.current === true) {
@@ -76,19 +80,21 @@ const AddFormItems = () => {
       numberOfItems: data.numberOfItems,
       status: "normalStore",
     });
+  };
+  console.log(isSuccess);
+  useEffect(() => {
     if (isSuccess) {
-      await message.open({
-        type: "success",
-        content: "Item added successfully!",
-      });
+      console.log("before", isSuccess);
+      message.success("Item added successfully!");
+      resetMutationState(postItem);
+      console.log("triggered");
+      console.log("after", isSuccess);
     }
     if (isError) {
-      await message.open({
-        type: "error",
-        content: "Something went wrong!",
-      });
+      message.error("Something went wrong!");
+      resetMutationState(postItem);
     }
-  };
+  }, [isSuccess, isError]);
 
   return (
     <div className="addItem">

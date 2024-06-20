@@ -1,22 +1,14 @@
-import { Table, TableProps, Tag } from "antd";
+import { Table, TableProps, Tag, Typography } from "antd";
 import { itemTypes2 } from "../types/types";
 
-const GeneratorTable = ({ tableData }: { tableData: itemTypes2[] }) => {
-  //   const [deleteCompositeData, { isSuccess, isLoading, isError }] =
-  //     useDeleteCompositeDataMutation();
-
-  //   const handleDelete = async (id: number) => {
-  //     deleteCompositeData(id);
-  //   };
-  //   if (isSuccess) {
-  //     console.log("deleteSuccess");
-  //   }
-  //   if (isLoading) {
-  //     console.log("deleteloading");
-  //   }
-  //   if (isError) {
-  //     console.log("isError");
-  //   }
+const GeneratorTable = ({
+  tableData,
+  refVal,
+}: {
+  tableData: itemTypes2[];
+  refVal: string | null;
+}) => {
+  const { Text } = Typography;
 
   const columns: TableProps<itemTypes2>["columns"] = [
     {
@@ -72,23 +64,40 @@ const GeneratorTable = ({ tableData }: { tableData: itemTypes2[] }) => {
       ),
     },
     {
-      title: "Buying price",
+      title: refVal === "entgraItems" ? "Our price" : "Buying price",
       dataIndex: "buyingPrice",
       key: "buying price",
+      render: (_, { buyingPrice, sellingPrice, sellerName }) =>
+        sellerName === "entgraItems" ? sellingPrice : buyingPrice,
     },
     {
       title: "Percentage",
       //   dataIndex: "profitPercentage",
       key: "percentage",
-      render: ({ profitPercentage, salePercentage }) =>
-        profitPercentage ? profitPercentage : salePercentage,
+      render: (_, { profitPercentage, salePercentage, status }) => (
+        <>
+          {status === "normalStore" ? (
+            <>
+              <Text type="success">(+{profitPercentage}%)</Text>
+            </>
+          ) : status === "sale" ? (
+            <Text type="warning">(-{salePercentage}%)</Text>
+          ) : (
+            <Text type="danger">-</Text>
+          )}
+        </>
+      ),
     },
     {
       title: "Display price",
       //   dataIndex: "sellingPrice",
       key: "selling price",
-      render: (_, { salePrice, sellingPrice }) =>
-        sellingPrice ? sellingPrice : salePrice,
+      render: (_, { salePrice, sellingPrice, stockClearingPrice }) =>
+        salePrice
+          ? salePrice
+          : stockClearingPrice
+          ? stockClearingPrice
+          : sellingPrice,
     },
     // {
     //   title: "Sale price",

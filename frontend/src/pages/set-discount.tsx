@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/nav-bar";
+import Navbar from "../layers/nav-bar";
 import Login from "./login";
 import SetDiscountForm from "../components/set-discount-form";
 

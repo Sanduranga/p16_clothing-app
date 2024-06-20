@@ -26,6 +26,10 @@ export const appApi = createApi({
       query: () => "items/get-items",
       providesTags: ["refresh2"],
     }),
+    getAllSalesItems: builder.query<itemTypes[], void>({
+      query: () => "sale-items/get-items",
+      providesTags: ["refresh2"],
+    }),
     getOneItem: builder.query<itemTypes, string>({
       query: (id) => `items/get-item?id=${id}`,
     }),
@@ -68,6 +72,9 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh2"],
     }),
+    resetMutationState: builder.mutation({
+      queryFn: () => ({ data: null }),
+    }),
   }),
 });
 
@@ -75,9 +82,11 @@ export const {
   useGetCompositeDataQuery,
   useDeleteCompositeDataMutation,
   useGetAllItemsQuery,
+  useGetAllSalesItemsQuery,
   useGetOneItemQuery,
   usePostItemMutation,
   usePostSaleItemMutation,
   usePostStockClearItemMutation,
   useDeleteItemMutation,
+  useResetMutationStateMutation,
 } = appApi;

@@ -86,6 +86,7 @@ export interface itemTypes2 {
   status: string;
   sellingType?: string;
   salePercentage?: number;
+  stockClearingPrice?: number;
 }
 
 export interface discountItemsTypes {

@@ -9,7 +9,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { saleStorePriceCal } from "../lib/utill";
+import { saleStorePriceCal } from "../utils/utill";
 import { discountItemsTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -18,15 +18,18 @@ import {
   useGetOneItemQuery,
   usePostSaleItemMutation,
   usePostStockClearItemMutation,
+  useResetMutationStateMutation,
 } from "../redux/rtkApi";
 
 const SetDiscountForm = () => {
   const firstRender = useRef(true);
+
   const [getInputs, setGetInputs] = useState({
     salePercentage: 0,
     salePrice: 0,
     stockClearingPrice: 0,
   });
+  const [item, setItem] = useState({ sellingType: "" });
 
   const { code } = useParams<{ code: "string" }>();
   const {
@@ -45,10 +48,9 @@ const SetDiscountForm = () => {
     postStockClearItem,
     { isLoading: IsLoadingStockItem, isSuccess: IsSuccessStockItem },
   ] = usePostStockClearItemMutation();
-  const [deleteItem, { isSuccess: deletedOk, error: deleteError }] =
-    useDeleteItemMutation();
+  const [deleteItem] = useDeleteItemMutation();
+  const [resetMutationState] = useResetMutationStateMutation();
 
-  const [item, setItem] = useState({ sellingType: "" });
   const handleSelectChange = (value: string, name: string) => {
     setItem({
       ...item,
@@ -67,50 +69,65 @@ const SetDiscountForm = () => {
     }
   }, [getInputs.salePercentage]);
 
-  if (deleteError) {
-    message.open({
-      type: "error",
-      content: "Item deleted failed!",
-    });
-  }
-  if (error) {
-    message.open({
-      type: "error",
-      content: "Item getting error!",
-    });
-  }
-  if (deletedOk) {
-    message.open({
-      type: "success",
-      content: "Item delete successfully!",
-    });
-  }
-  if (isGetSuccess) {
-    if (IsSuccessSaleItem) {
+  useEffect(() => {
+    // if (deleteError) {
+    //   message.open({
+    //     type: "error",
+    //     content: "Item deleted failed!",
+    //   });
+    // }
+    if (error) {
       message.open({
-        type: "success",
-        content: "Added successfully!",
+        type: "error",
+        content: "Item getting error!",
       });
-      deleteItem(data.id);
     }
-    if (IsSuccessStockItem) {
-      message.open({
-        type: "success",
-        content: "Added successfully!",
-      });
-      deleteItem(data.id);
+    // if (deletedOk) {
+    //   message.open({
+    //     type: "success",
+    //     content: "Item delete successfully!",
+    //   });
+    // }
+    if (isGetSuccess) {
+      if (IsSuccessSaleItem) {
+        message.open({
+          type: "success",
+          content: "Added to sale storage successfully!",
+        });
+        deleteItem(data.id);
+        resetMutationState(postSaleItem);
+        console.log("inside sale");
+      }
+      if (IsSuccessStockItem) {
+        message.open({
+          type: "success",
+          content: "Added stock clear storage successfully!",
+        });
+        deleteItem(data.id);
+        resetMutationState(postStockClearItem);
+        console.log("inside stock");
+      }
     }
-  }
+    resetMutationState(postSaleItem);
+    resetMutationState(postStockClearItem);
+    resetMutationState(deleteItem);
+    console.log("inside useEfct");
+  }, [error, IsSuccessStockItem, IsSuccessSaleItem]);
 
   const handleSubmit = (submitData: discountItemsTypes) => {
     if (isGetSuccess) {
-      if (getInputs.salePrice < data.buyingPrice) {
+      if (
+        item.sellingType === "sale" &&
+        getInputs.salePrice < data.buyingPrice
+      ) {
         message.open({
           type: "error",
           content: "Sale price should be greater than buying price!",
         });
         return;
       }
+      console.log(data);
+
       if (submitData.status === "sale") {
         postSaleItem({
           id: data.id,

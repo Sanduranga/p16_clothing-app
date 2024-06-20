@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Form, Select } from "antd";
-
 import { useGetCompositeDataQuery } from "../redux/rtkApi";
 import { itemTypes2 } from "../types/types";
 import { getAllData } from "../redux/slices/dataController";
@@ -15,6 +14,8 @@ const StockGenerator = () => {
   //     });
   //   };
   const [filteredArray, setFilteredArray] = useState<itemTypes2[]>([]);
+  const [storeStatus, setStoreStatus] = useState();
+  let storestt = useRef<string | null>(null);
   const dispatch = useDispatch();
   const { data: fetchedAllData, isSuccess } = useGetCompositeDataQuery();
   let fetchedAllDataArray = [] as itemTypes2[];
@@ -89,6 +90,7 @@ const StockGenerator = () => {
     status: string;
     itemType: string;
   }) => {
+    storestt.current = data.sellerName;
     filtering(data);
   };
 
@@ -143,7 +145,7 @@ const StockGenerator = () => {
           </Button>
         </Form.Item>
       </Form>
-      <GeneratorTable tableData={filteredArray} />
+      <GeneratorTable tableData={filteredArray} refVal={storestt.current} />
     </div>
   );
 };

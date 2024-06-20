@@ -10,6 +10,7 @@ import ClickedItemPage from "./pages/clicked-item.tsx";
 import { ConfigProvider } from "antd";
 import SetDiscount from "./pages/set-discount.tsx";
 import MyStore from "./pages/my-store.tsx";
+import SaleItems from "./pages/sale-items.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/my-store",
     element: <MyStore />,
+  },
+  {
+    path: "/sale",
+    element: <SaleItems />,
   },
 ]);
 
