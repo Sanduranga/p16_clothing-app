@@ -81,7 +81,7 @@ const AddFormItems = () => {
       status: "normalStore",
     });
   };
-  console.log(isSuccess);
+
   useEffect(() => {
     if (isSuccess) {
       console.log("before", isSuccess);

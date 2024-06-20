@@ -13,11 +13,11 @@ export const appApi = createApi({
   endpoints: (builder) => ({
     getCompositeData: builder.query<allDataObject, void>({
       query: () => "items/all-items",
-      providesTags: ["refresh1"],
+      providesTags: ["refresh1", "refresh2"],
     }),
-    deleteCompositeData: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `items/all-delete-item?id=${id}`,
+    deleteCompositeData: builder.mutation<string, string>({
+      query: (code) => ({
+        url: `items/all-delete-item?code=${code}`,
         method: "DELETE",
       }),
       invalidatesTags: ["refresh1", "refresh2"],
