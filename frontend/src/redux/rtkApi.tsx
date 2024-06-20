@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { allDataObject, discountItemsTypes, itemTypes } from "../types/types";
+import {
+  allDataObject,
+  discountItemsTypes,
+  itemTypes,
+  postItemTypes,
+} from "../types/types";
 
 export const appApi = createApi({
   reducerPath: "appApis",
@@ -24,7 +29,7 @@ export const appApi = createApi({
     getOneItem: builder.query<itemTypes, string>({
       query: (id) => `items/get-item?id=${id}`,
     }),
-    postItem: builder.mutation<void, itemTypes>({
+    postItem: builder.mutation<void, postItemTypes>({
       query: (data) => ({
         url: "items/add-item",
         method: "POST",

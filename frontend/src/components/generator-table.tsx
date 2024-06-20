@@ -1,5 +1,4 @@
-import { Space, Table, TableProps, Tag } from "antd";
-import { useDeleteCompositeDataMutation } from "../redux/rtkApi";
+import { Table, TableProps, Tag } from "antd";
 import { itemTypes2 } from "../types/types";
 
 const GeneratorTable = ({ tableData }: { tableData: itemTypes2[] }) => {

@@ -99,26 +99,30 @@ const Navbar = () => {
         <Typography.Title style={{ cursor: "pointer" }} level={2}>
           <ShoppingCartOutlined />
         </Typography.Title>
-        <Link style={{ textDecoration: "none" }} to={"/add-items"}>
-          <Typography.Title
-            level={5}
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            Add items
-          </Typography.Title>
-        </Link>
-        <Link style={{ textDecoration: "none" }} to={"/my-store"}>
-          <Typography.Title
-            level={5}
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            My store
-          </Typography.Title>
-        </Link>
+        {loggedIn && (
+          <>
+            <Link style={{ textDecoration: "none" }} to={"/add-items"}>
+              <Typography.Title
+                level={5}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                Add items
+              </Typography.Title>
+            </Link>
+            <Link style={{ textDecoration: "none" }} to={"/my-store"}>
+              <Typography.Title
+                level={5}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                My store
+              </Typography.Title>
+            </Link>
+          </>
+        )}
 
         <Typography.Title
           onClick={handlelogin}

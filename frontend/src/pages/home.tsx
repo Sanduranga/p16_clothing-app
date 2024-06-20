@@ -3,9 +3,14 @@ import { useGetAllItemsQuery } from "../redux/rtkApi";
 import Login from "./login";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const Home: React.FC = () => {
   const { data, isLoading } = useGetAllItemsQuery();
+  const logged = useSelector(
+    (state: RootState) => state.appController.loggedUser.loggedIn
+  );
   const navigate = useNavigate();
 
   return (
@@ -22,12 +27,13 @@ const Home: React.FC = () => {
               actions={[
                 <Rate allowHalf disabled value={4} />,
                 <ShoppingCartOutlined />,
-                <Button
-                  onClick={() => navigate(`/set-discount/${products.id}`)}
-                >
-                  Set discount
-                </Button>,
-                <Button onClick={() => navigate(`#`)}>Edit</Button>,
+                logged && (
+                  <Button
+                    onClick={() => navigate(`/set-discount/${products.id}`)}
+                  >
+                    Set discount
+                  </Button>
+                ),
               ]}
               cover={
                 <Image

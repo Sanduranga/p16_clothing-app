@@ -26,6 +26,27 @@ export interface userlogingTypes {
 }
 
 export interface itemTypes {
+  id: number;
+  sellerName: string;
+  materialName: string;
+  itemTitle: string;
+  itemIs?: string;
+  itemColor: string;
+  itemSize: string;
+  description: string;
+  itemType: string;
+  code: string;
+  buyingPrice: number;
+  sellingPrice: number;
+  salePrice?: number;
+  profitPercentage?: number;
+  numberOfItems: number;
+  status: string;
+  sellingType?: string;
+  salePercentage?: number;
+}
+
+export interface postItemTypes {
   id?: number;
   sellerName: string;
   materialName: string;

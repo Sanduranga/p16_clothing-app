@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Col, Drawer, Space, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { openDrawer, signInForm } from "../redux/slices/appActions";
+import { loggedIn, openDrawer, signInForm } from "../redux/slices/appActions";
 import LoginForm from "../components/login-form";
 import SigninForm from "../components/signinForm";
 
@@ -10,6 +10,9 @@ const Login: React.FC = () => {
   const action = useSelector((state: RootState) => state.appController.drawer);
   const signIn = useSelector(
     (state: RootState) => state.appController.signInForm
+  );
+  const logged = useSelector(
+    (state: RootState) => state.appController.loggedUser.loggedIn
   );
   const dispatch = useDispatch();
 
@@ -37,12 +40,20 @@ const Login: React.FC = () => {
           style={{ position: "absolute", width: "60%", padding: "0 50px 0 0" }}
         >
           <Button
-            style={{ marginBottom: 10, backgroundColor: "green" }}
+            style={{ marginBottom: 10 }}
             onClick={() => dispatch(openDrawer())}
           >
             Back
           </Button>
-          {!signIn ? (
+          {logged ? (
+            <Button
+              style={{ marginBottom: 10, marginLeft: 10 }}
+              onClick={() => dispatch(loggedIn(false))}
+              danger
+            >
+              Sign out
+            </Button>
+          ) : !signIn ? (
             <Col>
               <LoginForm />
               <Typography.Title level={4}>create an account?</Typography.Title>
