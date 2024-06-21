@@ -8,7 +8,6 @@ const MyStore: React.FC = () => {
     <Suspense fallback={"loading"}>
       <Navbar />
       <Login />
-
       <StockGenerator />
     </Suspense>
   );

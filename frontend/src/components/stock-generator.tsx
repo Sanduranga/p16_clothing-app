@@ -7,6 +7,10 @@ import {
 } from "../redux/rtkApi";
 import { itemTypes2 } from "../types/types";
 import GeneratorTable from "./generator-table";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface inputTypes {
   sellerName: string;
@@ -23,6 +27,11 @@ const StockGenerator: React.FC = ({}) => {
     status: "",
     itemType: "",
   });
+  const [chartData, setChartData] = useState({
+    normalStoreItems: 0,
+    saleStoreItems: 0,
+    stockClearingStoreItems: 0,
+  });
 
   let storeState = useRef<string | null>(null);
   let deleteCode = useRef("null");
@@ -31,7 +40,7 @@ const StockGenerator: React.FC = ({}) => {
     data: fetchedAllData,
     isSuccess,
     isError,
-  } = useGetCompositeDataQuery();
+  } = useGetCompositeDataQuery(); // get all items
   const [deleteCompositeData, { isSuccess: deletedOk, isError: deletedError }] =
     useDeleteCompositeDataMutation();
   const [resetMutationState] = useResetMutationStateMutation();
@@ -53,7 +62,7 @@ const StockGenerator: React.FC = ({}) => {
     if (isError) {
       messageApi.open({
         type: "error",
-        content: "Something went wrong!",
+        content: "Item getting error!",
       });
     }
     resetMutationState(deleteCompositeData);
@@ -63,6 +72,7 @@ const StockGenerator: React.FC = ({}) => {
 
   if (isSuccess) {
     const { itemsData, saleItemsData, stockClearItemsData } = fetchedAllData;
+    // destructuring fetched all data and assigned them into one array call `fetchedAllDataArray`
     fetchedAllDataArray = [
       ...itemsData,
       ...saleItemsData,
@@ -71,6 +81,25 @@ const StockGenerator: React.FC = ({}) => {
   }
 
   useEffect(() => {
+    setChartData((prev) => ({
+      ...prev,
+      normalStoreItems: fetchedAllDataArray.filter(
+        (item) => item.status === "normalStore"
+      ).length,
+      saleStoreItems: fetchedAllDataArray.filter(
+        (item) => item.status === "sale"
+      ).length,
+      stockClearingStoreItems: fetchedAllDataArray.filter(
+        (item) => item.status === "stockClearing"
+      ).length,
+    }));
+    // saleStoreItems = fetchedAllDataArray.filter(
+    //   (item) => item.status === "saleStore"
+    // ).length;
+    // stockClearingStoreItems = fetchedAllDataArray.filter(
+    //   (item) => item.status === "stockClear"
+    // ).length;
+
     // start filtering the fetched data according to input selectors
     if (filterInputs.sellerName) {
       const filtering_1 =
@@ -131,11 +160,45 @@ const StockGenerator: React.FC = ({}) => {
     setFilterInputs(data);
   };
 
+  const chart = {
+    labels: ["Normal", "Sale", "Stock clearing"],
+    datasets: [
+      {
+        label: "No. of items",
+        data: [
+          chartData.normalStoreItems,
+          chartData.saleStoreItems,
+          chartData.stockClearingStoreItems,
+        ],
+        backgroundColor: [
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+          "rgb(255, 99, 132)",
+        ],
+        borderColor: [
+          "rgb(108, 144, 189)",
+          "rgb(108, 144, 189)",
+          "rgb(108, 144, 189)",
+        ],
+        hoverOffset: 4,
+        borderWidth: 1,
+        borderRadius: 30,
+        spacing: 10,
+        cutout: 10,
+        rotation: 20,
+        radius: "80%",
+      },
+    ],
+  };
+  console.log(chartData);
+
   return (
     <div style={{ padding: "30px" }}>
       {contextHolder}
       <Row>
-        <Col span={8}>graph</Col>
+        <Col span={10}>
+          <Doughnut data={chart} />
+        </Col>
         <Col span={8}>
           <Form onFinish={handleSubmit}>
             <Form.Item name="sellerName">
@@ -193,7 +256,7 @@ const StockGenerator: React.FC = ({}) => {
           </Form>
         </Col>
 
-        <Col span={8}>
+        <Col span={6}>
           <Row>
             <Col flex={2}>
               <Input

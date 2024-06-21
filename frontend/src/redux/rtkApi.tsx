@@ -39,7 +39,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["refresh2"],
+      invalidatesTags: ["refresh1", "refresh2"],
     }),
     postSaleItem: builder.mutation<void, discountItemsTypes>({
       query: (data) => ({
@@ -47,7 +47,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["refresh2"],
+      invalidatesTags: ["refresh1", "refresh2"],
     }),
     postStockClearItem: builder.mutation<void, discountItemsTypes>({
       query: (data) => ({
@@ -55,7 +55,7 @@ export const appApi = createApi({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["refresh2"],
+      invalidatesTags: ["refresh1", "refresh2"],
     }),
     deleteItem: builder.mutation<void, number>({
       query: (id) => ({
