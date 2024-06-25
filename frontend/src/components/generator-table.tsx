@@ -1,21 +1,18 @@
 import { Table, TableProps, Tag, Typography } from "antd";
-import { itemTypes2 } from "../types/types";
+import { fetchedAllDataArray } from "./stock-generator";
 
 const GeneratorTable = ({
   tableData,
-  refVal,
 }: {
-  tableData: itemTypes2[];
-  refVal: string | null;
+  tableData: fetchedAllDataArray[];
 }) => {
   const { Text } = Typography;
 
-  const columns: TableProps<itemTypes2>["columns"] = [
+  const columns: TableProps<fetchedAllDataArray>["columns"] = [
     {
       title: "Code",
       dataIndex: "code",
       key: "code",
-      render: (text) => <a>{text}</a>,
     },
     {
       title: "Seller name",
@@ -64,15 +61,13 @@ const GeneratorTable = ({
       ),
     },
     {
-      title: refVal === "entgraItems" ? "Our price" : "Buying price",
+      title: "Buying/Starting price",
       dataIndex: "buyingPrice",
-      key: "buying price",
       render: (_, { buyingPrice, sellingPrice, sellerName }) =>
         sellerName === "entgraItems" ? sellingPrice : buyingPrice,
     },
     {
       title: "Percentage",
-      //   dataIndex: "profitPercentage",
       key: "percentage",
       render: (_, { profitPercentage, salePercentage, status }) => (
         <>
@@ -90,7 +85,6 @@ const GeneratorTable = ({
     },
     {
       title: "Display price",
-      //   dataIndex: "sellingPrice",
       key: "selling price",
       render: (_, { salePrice, sellingPrice, stockClearingPrice }) =>
         salePrice
@@ -99,28 +93,6 @@ const GeneratorTable = ({
           ? stockClearingPrice
           : sellingPrice,
     },
-    // {
-    //   title: "Sale price",
-    //   dataIndex: "salePrice",
-    //   key: "sale price",
-    //   render: (_, { salePrice }) => (salePrice ? salePrice : <>_</>),
-    // },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (_, data) => (
-    //     <Space size="middle">
-    //       {/* <a>Invite {record.name}</a> */}
-    //       <a
-    //         onClick={() => {
-    //           handleDelete(data.id);
-    //         }}
-    //       >
-    //         Delete
-    //       </a>
-    //     </Space>
-    //   ),
-    // },
   ];
   return <Table columns={columns} dataSource={tableData} />;
 };

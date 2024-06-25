@@ -1,8 +1,8 @@
 import { Badge, Descriptions } from "antd";
 import type { DescriptionsProps } from "antd";
-import { itemTypes } from "../types/types";
+import { allDataTypes } from "../types/types";
 
-const ItemDescription = ({ data }: { data: itemTypes }) => {
+const ItemDescription = ({ data }: { data: allDataTypes }) => {
   const items: DescriptionsProps["items"] = [
     {
       key: "1",

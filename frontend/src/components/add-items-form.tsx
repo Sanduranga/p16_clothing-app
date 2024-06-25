@@ -8,7 +8,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { itemTypes } from "../types/types";
+import { NormalStoreTypes } from "../types/types";
 import { useEffect, useRef, useState } from "react";
 import { CodeGenerater, normalStorePriceCal } from "../utils/utill";
 import {
@@ -51,7 +51,7 @@ const AddFormItems = () => {
     }
   }, [getInputs.profitPercentage, getInputs.buyingPrice]);
 
-  const handleSubmit = async (data: itemTypes) => {
+  const handleSubmit = async (data: NormalStoreTypes) => {
     const code = CodeGenerater(
       data.sellerName,
       data.itemType,
@@ -99,7 +99,7 @@ const AddFormItems = () => {
   return (
     <div className="addItem">
       <Form layout="vertical" onFinish={handleSubmit}>
-        <Row gutter={{ sm: 20 }}>
+        <Row justify={"center"} gutter={{ sm: 20 }}>
           <Col md={{ span: 8 }} sm={12} xs={24}>
             <Form.Item
               label="Item is"

@@ -1,16 +1,20 @@
 import { Menu, Typography } from "antd";
-import { HomeFilled, ShoppingCartOutlined } from "@ant-design/icons";
+import { HomeFilled } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { openDrawer } from "../redux/slices/appActions";
 import { RootState } from "../redux/store";
-import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  // const { login, register, isAuthenticated, logout } = useKindeAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { name, loggedIn } = useSelector(
+
+  const { loggedIn, name } = useSelector(
     (state: RootState) => state.appController.loggedUser
   );
+
+  // get name and then convert into array -> get five elements -> finaly convert to string again
   const truncatedName = name.split("").slice(0, 5).join("");
 
   const handleMenuClick = (item: any) => {
@@ -19,6 +23,18 @@ const Navbar = () => {
   const handlelogin = () => {
     dispatch(openDrawer());
   };
+
+  // const registerfunc = () => {
+  //   register();
+  // };
+  // const loginfunc = () => {
+  //   if (isAuthenticated) {
+  //     logout();
+  //   } else {
+  //     login();
+  //   }
+  // };
+
   return (
     <div className="navBar">
       <Menu
@@ -31,74 +47,20 @@ const Navbar = () => {
             key: "",
           },
           {
-            label: "Men",
-            key: "men",
-            children: [
-              {
-                label: "Men's Shirts",
-                key: "mens-shirts",
-              },
-              {
-                label: "Men's Geans",
-                key: "mens-geans",
-              },
-              {
-                label: "Men's Shoes",
-                key: "mens-shoes",
-              },
-            ],
-          },
-          {
-            label: "Women",
-            key: "women",
-            children: [
-              {
-                label: "Women's Blouses",
-                key: "womens-blouses",
-              },
-              {
-                label: "Women's Geans",
-                key: "womens-geans",
-              },
-              {
-                label: "Women's Shoes",
-                key: "womens-shoes",
-              },
-              {
-                label: "Women's Bags",
-                key: "womens-bags",
-              },
-            ],
-          },
-          {
-            label: "Kids",
-            key: "kids",
-            children: [
-              {
-                label: "Kids Dresses",
-                key: "kids-dresses",
-              },
-              {
-                label: "Kids Shoes",
-                key: "kids-shoes",
-              },
-              {
-                label: "Kids Bags",
-                key: "kids-bags",
-              },
-            ],
-          },
-          {
             label: "Sale",
             key: "sale",
+          },
+          {
+            label: "Stock clearing",
+            key: "StockClearing",
           },
         ]}
       />
       <Typography.Title level={2}>Entgra Store</Typography.Title>
       <div className="cartLogin">
-        <Typography.Title style={{ cursor: "pointer" }} level={2}>
+        {/* <Typography.Title style={{ cursor: "pointer" }} level={2}>
           <ShoppingCartOutlined />
-        </Typography.Title>
+        </Typography.Title> */}
         {loggedIn && (
           <>
             <Link style={{ textDecoration: "none" }} to={"/add-items"}>
@@ -131,6 +93,11 @@ const Navbar = () => {
         >
           {loggedIn ? `Hi ${truncatedName}` : "Login"}
         </Typography.Title>
+        {/* 
+        <Button onClick={registerfunc}>Register</Button>
+        <Button onClick={loginfunc}>
+          {isAuthenticated ? `Log out` : `Log In`}
+        </Button> */}
       </div>
     </div>
   );

@@ -1,16 +1,16 @@
-export interface allProductsTypes {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: [];
-}
+// export interface allProductsTypes {
+//   id: number;
+//   title: string;
+//   description: string;
+//   price: number;
+//   discountPercentage: number;
+//   rating: number;
+//   stock: number;
+//   brand: string;
+//   category: string;
+//   thumbnail: string;
+//   images: [];
+// }
 
 export interface getDatatypes {
   products: itemTypes[];
@@ -26,91 +26,49 @@ export interface userlogingTypes {
 }
 
 export interface itemTypes {
-  id: number;
   sellerName: string;
   materialName: string;
   itemTitle: string;
-  itemIs?: string;
   itemColor: string;
   itemSize: string;
   description: string;
   itemType: string;
   code: string;
-  buyingPrice: number;
-  sellingPrice: number;
-  salePrice?: number;
-  profitPercentage?: number;
   numberOfItems: number;
   status: string;
-  sellingType?: string;
-  salePercentage?: number;
+  buyingPrice?: number;
 }
 
-export interface postItemTypes {
+export interface NormalStoreTypes extends itemTypes {
   id?: number;
-  sellerName: string;
-  materialName: string;
-  itemTitle: string;
-  itemIs?: string;
-  itemColor: string;
-  itemSize: string;
-  description: string;
-  itemType: string;
-  code: string;
-  buyingPrice: number;
   sellingPrice: number;
-  salePrice?: number;
-  profitPercentage?: number;
-  numberOfItems: number;
-  status: string;
-  sellingType?: string;
-  salePercentage?: number;
+  profitPercentage: number;
 }
 
-export interface itemTypes2 {
+export interface saleStoreTypes extends itemTypes {
   id: number;
-  sellerName: string;
-  materialName: string;
-  itemTitle: string;
-  itemIs?: string;
-  itemColor: string;
-  itemSize: string;
-  description: string;
-  itemType: string;
-  code: string;
-  buyingPrice: number;
   sellingPrice: number;
-  salePrice?: number;
-  profitPercentage?: number;
-  numberOfItems: number;
-  status: string;
-  sellingType?: string;
-  salePercentage?: number;
-  stockClearingPrice?: number;
+  salePrice: number;
+  sellingType: string;
+  salePercentage: number;
 }
 
-export interface discountItemsTypes {
-  id?: number;
-  sellerName: string;
-  materialName: string;
-  itemTitle: string;
-  itemIs?: string;
-  itemColor: string;
-  itemSize: string;
-  description: string;
-  itemType: string;
-  code: string;
-  buyingPrice: number;
-  sellingPrice?: number;
-  salePrice?: number;
-  numberOfItems: number;
-  status: string;
-  salePercentage?: number;
-  stockClearingPrice?: number;
+export interface stockClearingTypes extends itemTypes {
+  id: number;
+  sellingPrice: number;
+  stockClearingPrice: number;
 }
 
-export interface allDataObject {
-  itemsData: itemTypes2[];
-  saleItemsData: itemTypes2[];
-  stockClearItemsData: itemTypes2[];
+export interface allDataTypes
+  extends itemTypes,
+    saleStoreTypes,
+    stockClearingTypes {
+  sellingPrice: number;
+  profitPercentage: number;
+}
+
+export interface composeDataObjects {
+  itemsData: NormalStoreTypes[];
+  saleItemsData: saleStoreTypes[];
+  stockClearItemsData: stockClearingTypes[];
 }

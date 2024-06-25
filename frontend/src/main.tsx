@@ -11,6 +11,7 @@ import { ConfigProvider } from "antd";
 import SetDiscount from "./pages/set-discount.tsx";
 import MyStore from "./pages/my-store.tsx";
 import SaleItems from "./pages/sale-items.tsx";
+import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const router = createBrowserRouter([
   {
@@ -56,7 +57,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }}
     >
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <KindeProvider
+          clientId="ea3634bc10cc4476bb5621811b467458"
+          domain="https://entgraproject.kinde.com"
+          redirectUri="http://localhost:5173"
+          logoutUri="http://localhost:5173"
+        >
+          <RouterProvider router={router} />
+        </KindeProvider>
       </Provider>
     </ConfigProvider>
   </React.StrictMode>
