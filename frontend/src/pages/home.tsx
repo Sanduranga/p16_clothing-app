@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Image, List, Rate, Typography } from "antd";
+import { Badge, Button, Card, Image, List, Typography } from "antd";
 import { useGetCompositeDataQuery } from "../redux/rtkApi";
 import Login from "./login";
 import { useNavigate } from "react-router-dom";

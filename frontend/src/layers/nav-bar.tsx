@@ -52,7 +52,7 @@ const Navbar = () => {
           },
           {
             label: "Stock clearing",
-            key: "StockClearing",
+            key: "stock-clearing",
           },
         ]}
       />
