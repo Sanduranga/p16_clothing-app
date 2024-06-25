@@ -29,12 +29,6 @@ const Login: React.FC = () => {
           borderRadius: "0 100% 40% 0",
           padding: "0 100px 40px 0",
         }}
-        extra={
-          <Space>
-            <Button onClick={() => dispatch(openDrawer())}>Cancel</Button>
-            <Button type="primary">OK</Button>
-          </Space>
-        }
       >
         <div
           style={{ position: "absolute", width: "60%", padding: "0 50px 0 0" }}
