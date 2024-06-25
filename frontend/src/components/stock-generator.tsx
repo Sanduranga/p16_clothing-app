@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Col, Flex, Form, Input, Row, Select, message } from "antd";
+import { Button, Col, Form, Input, Row, Select, message } from "antd";
 import {
   useDeleteCompositeDataMutation,
   useGetCompositeDataQuery,
@@ -30,7 +30,29 @@ export interface fetchedAllDataArray extends itemTypes {
 const StockGenerator: React.FC = ({}) => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [filteredArray, setFilteredArray] = useState<fetchedAllDataArray[]>([]);
+  const {
+    data: fetchedAllData,
+    isSuccess,
+    isError,
+  } = useGetCompositeDataQuery(); // get all items
+  const [deleteCompositeData, { isSuccess: deletedOk, isError: deletedError }] =
+    useDeleteCompositeDataMutation();
+  const [resetMutationState] = useResetMutationStateMutation();
+
+  let fetchedAllDataArray = [] as fetchedAllDataArray[];
+
+  if (isSuccess) {
+    const { itemsData, saleItemsData, stockClearItemsData } = fetchedAllData;
+    // destructuring fetched all data and assigned them into one array call `fetchedAllDataArray`
+    fetchedAllDataArray = [
+      ...itemsData,
+      ...saleItemsData,
+      ...stockClearItemsData,
+    ];
+  }
+
+  const [filteredArray, setFilteredArray] =
+    useState<fetchedAllDataArray[]>(fetchedAllDataArray);
   const [filterInputs, setFilterInputs] = useState<inputTypes>({
     sellerName: "",
     status: "",
@@ -45,17 +67,8 @@ const StockGenerator: React.FC = ({}) => {
   // let storeState = useRef<string | null>(null);
   let deleteCode = useRef("null"); // to catch the input item code going to be deleted.
 
-  const {
-    data: fetchedAllData,
-    isSuccess,
-    isError,
-  } = useGetCompositeDataQuery(); // get all items
-  const [deleteCompositeData, { isSuccess: deletedOk, isError: deletedError }] =
-    useDeleteCompositeDataMutation();
-  const [resetMutationState] = useResetMutationStateMutation();
-
   useEffect(() => {
-    // handling the messages
+    // this useEffect hook is used for handling the messages because `deletedOk, isError, deletedError` are promices. so weneed to rerender the component once they are changed.
     if (deletedOk) {
       messageApi.open({
         type: "success",
@@ -77,18 +90,6 @@ const StockGenerator: React.FC = ({}) => {
     resetMutationState(deleteCompositeData);
   }, [deletedOk, isError, deletedError]);
 
-  let fetchedAllDataArray = [] as fetchedAllDataArray[];
-
-  if (isSuccess) {
-    const { itemsData, saleItemsData, stockClearItemsData } = fetchedAllData;
-    // destructuring fetched all data and assigned them into one array call `fetchedAllDataArray`
-    fetchedAllDataArray = [
-      ...itemsData,
-      ...saleItemsData,
-      ...stockClearItemsData,
-    ];
-  }
-
   useEffect(() => {
     setChartData((prev) => ({
       ...prev,
@@ -102,12 +103,6 @@ const StockGenerator: React.FC = ({}) => {
         (item) => item.status === "stockClearing"
       ).length,
     }));
-    // saleStoreItems = fetchedAllDataArray.filter(
-    //   (item) => item.status === "saleStore"
-    // ).length;
-    // stockClearingStoreItems = fetchedAllDataArray.filter(
-    //   (item) => item.status === "stockClear"
-    // ).length;
 
     // start filtering the fetched data according to input selectors
     if (filterInputs.sellerName) {
