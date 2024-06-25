@@ -1,6 +1,6 @@
 import { Carousel, Col, Image, Row, Spin, message } from "antd";
 import React from "react";
-import Navbar from "../layers/nav-bar";
+import Navbar from "../layouts/nav-bar";
 import ItemDescription from "../components/item-description";
 import { useGetOneItemQuery } from "../redux/rtkApi";
 import { useParams } from "react-router-dom";

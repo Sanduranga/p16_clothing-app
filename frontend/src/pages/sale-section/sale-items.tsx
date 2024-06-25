@@ -4,7 +4,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useGetAllSalesItemsQuery } from "../../redux/rtkApi";
 import { RootState } from "../../redux/store";
-import Navbar from "../../layers/nav-bar";
+import Navbar from "../../layouts/nav-bar";
 import Login from "../login";
 
 const SaleItems: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import Navbar from "../layers/nav-bar";
+import Navbar from "../layouts/nav-bar";
 import Login from "./login";
 import StockGenerator from "../components/stock-generator";
 
