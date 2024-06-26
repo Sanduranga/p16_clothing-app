@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { saleStorePriceCal } from "../../utils/utill";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteItemMutation, useGetOneItemQuery } from "../../api";
 import { allDataTypes } from "../../types/types";
 import { usePostSaleItemMutation } from "../../api";
@@ -27,6 +27,8 @@ export const SetDiscount = () => {
     stockClearingPrice: 0,
   });
   const [item, setItem] = useState({ sellingType: "" });
+
+  const navigate = useNavigate();
 
   const { code } = useParams<{ code: "string" }>();
   const {
@@ -70,24 +72,12 @@ export const SetDiscount = () => {
   }, [getInputs.salePercentage]);
 
   useEffect(() => {
-    // if (deleteError) {
-    //   message.open({
-    //     type: "error",
-    //     content: "Item deleted failed!",
-    //   });
-    // }
     if (error) {
       message.open({
         type: "error",
         content: "Item getting error!",
       });
     }
-    // if (deletedOk) {
-    //   message.open({
-    //     type: "success",
-    //     content: "Item delete successfully!",
-    //   });
-    // }
     if (isGetSuccess) {
       if (IsSuccessSaleItem) {
         message.open({
@@ -105,9 +95,8 @@ export const SetDiscount = () => {
         deleteItem(data.id);
         resetMutationState(postStockClearItem);
       }
+      navigate(-1);
     }
-    resetMutationState(postSaleItem);
-    resetMutationState(postStockClearItem);
     resetMutationState(deleteItem);
   }, [error, IsSuccessStockItem, IsSuccessSaleItem]);
 
