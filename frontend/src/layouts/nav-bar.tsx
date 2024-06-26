@@ -2,7 +2,7 @@ import { Menu, Typography } from "antd";
 import { HomeFilled } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { openDrawer } from "../redux/slices/appActions";
+import { openDrawer } from "../slices/appActions";
 import { RootState } from "../redux/store";
 
 const Navbar = () => {

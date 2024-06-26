@@ -2,22 +2,19 @@ import { Badge, Button, Card, Image, List, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { useGetAllSalesItemsQuery } from "../../redux/rtkApi";
+import { useGetAllSalesItemsQuery } from "../../api/rtkApi";
 import { RootState } from "../../redux/store";
-import Navbar from "../../layouts/nav-bar";
-import Login from "../login";
 
 const StockClearingItems: React.FC = () => {
   const { data, isLoading } = useGetAllSalesItemsQuery();
-  const logged = useSelector(
-    (state: RootState) => state.appController.loggedUser.loggedIn
-  );
-  const navigate = useNavigate();
-  console.log("saleitems page");
+  // const logged = useSelector(
+  //   (state: RootState) => state.appController.loggedUser.loggedIn
+  // );
+  // const navigate = useNavigate();
+  // console.log("saleitems page");
 
   return (
     <div>
-      <Navbar />
       <List
         loading={isLoading}
         grid={{
@@ -73,9 +70,8 @@ const StockClearingItems: React.FC = () => {
         }}
         dataSource={data}
       ></List>
-      <Login />
     </div>
   );
 };
 
-export default StockClearingItems;
+export { StockClearingItems };

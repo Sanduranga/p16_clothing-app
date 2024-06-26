@@ -1,8 +1,8 @@
 import { Button, Form, Input, Select, message } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
-import { userlogingTypes } from "../types/types";
+import { userlogingTypes } from "../../../types/types";
 import { useDispatch } from "react-redux";
-import { signInForm } from "../redux/slices/appActions";
+import { signInForm } from "../../../slices/appActions";
 import { useState } from "react";
 
 const SigninForm = () => {

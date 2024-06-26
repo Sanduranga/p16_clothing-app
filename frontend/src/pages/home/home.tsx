@@ -1,11 +1,11 @@
 import { Badge, Button, Card, Image, List, Typography } from "antd";
-import { useGetCompositeDataQuery } from "../redux/rtkApi";
-import Login from "./login";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { fetchedAllDataArray } from "../components/stock-generator";
+import { useGetCompositeDataQuery } from "../../api/rtkApi";
+import { fetchedAllDataArray } from "../my-store/sub-components/stock-generator";
+import { RootState } from "../../redux/store";
+import { LoginPage } from "../log-in";
 
 const Home: React.FC = () => {
   const { data, isLoading, isSuccess } = useGetCompositeDataQuery();
@@ -107,9 +107,9 @@ const Home: React.FC = () => {
         }}
         dataSource={fetchedAllDataArray}
       ></List>
-      <Login />
+      <LoginPage />
     </div>
   );
 };
 
-export default Home;
+export { Home };

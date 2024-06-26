@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Input, Row, Select, message } from "antd";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import { itemTypes } from "../../../types/types";
 import {
   useDeleteCompositeDataMutation,
   useGetCompositeDataQuery,
   useResetMutationStateMutation,
-} from "../redux/rtkApi";
-import { itemTypes } from "../types/types";
+} from "../../../api/rtkApi";
 import GeneratorTable from "./generator-table";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

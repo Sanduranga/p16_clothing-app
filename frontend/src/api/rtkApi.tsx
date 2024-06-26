@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   NormalStoreTypes,
+  allDataTypes,
   composeDataObjects,
   saleStoreTypes,
   stockClearingTypes,
@@ -30,7 +31,7 @@ export const appApi = createApi({
       query: () => "sale-items/get-items",
       providesTags: ["refresh2"],
     }),
-    getOneItem: builder.query<NormalStoreTypes, string>({
+    getOneItem: builder.query<allDataTypes, string>({
       query: (id) => `items/get-item?id=${id}`,
     }),
     postItem: builder.mutation<void, NormalStoreTypes>({

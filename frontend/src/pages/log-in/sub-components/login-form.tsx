@@ -1,8 +1,8 @@
 import { Button, Form, Input, message } from "antd";
-import { userlogingTypes } from "../types/types";
+import { userlogingTypes } from "../../../types/types";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loggedIn, openDrawer, setUserName } from "../redux/slices/appActions";
+import { loggedIn, openDrawer, setUserName } from "../../../slices/appActions";
 
 const LoginForm = () => {
   const [load, setLoad] = useState(false);

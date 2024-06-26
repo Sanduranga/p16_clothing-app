@@ -1,23 +1,17 @@
-import { Badge, Button, Card, Image, List, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Badge, Card, Image, List, Typography } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { useGetAllSalesItemsQuery } from "../../redux/rtkApi";
+import { useGetAllSalesItemsQuery } from "../../api/rtkApi";
 import { RootState } from "../../redux/store";
-import Navbar from "../../layouts/nav-bar";
-import Login from "../login";
 
-const SaleItems: React.FC = () => {
+export const SaleItems: React.FC = () => {
   const { data, isLoading } = useGetAllSalesItemsQuery();
-  const logged = useSelector(
-    (state: RootState) => state.appController.loggedUser.loggedIn
-  );
-  const navigate = useNavigate();
-  console.log("saleitems page");
+  // const logged = useSelector(
+  //   (state: RootState) => state.appController.loggedUser.loggedIn
+  // );
 
   return (
     <div>
-      <Navbar />
       <List
         loading={isLoading}
         grid={{
@@ -76,10 +70,6 @@ const SaleItems: React.FC = () => {
         }}
         dataSource={data}
       ></List>
-
-      <Login />
     </div>
   );
 };
-
-export default SaleItems;

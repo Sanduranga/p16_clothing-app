@@ -9,8 +9,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { saleStorePriceCal } from "../utils/utill";
-import { discountItemsTypes } from "../types/types";
+import { saleStorePriceCal } from "../../../utils/utill";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -19,7 +18,8 @@ import {
   usePostSaleItemMutation,
   usePostStockClearItemMutation,
   useResetMutationStateMutation,
-} from "../redux/rtkApi";
+} from "../../../api/rtkApi";
+import { allDataTypes } from "../../../types/types";
 
 const SetDiscountForm = () => {
   const firstRender = useRef(true);
@@ -114,10 +114,11 @@ const SetDiscountForm = () => {
     console.log("inside useEfct");
   }, [error, IsSuccessStockItem, IsSuccessSaleItem]);
 
-  const handleSubmit = (submitData: discountItemsTypes) => {
+  const handleSubmit = (submitData: allDataTypes) => {
     if (isGetSuccess) {
       if (
         item.sellingType === "sale" &&
+        data.buyingPrice &&
         getInputs.salePrice < data.buyingPrice
       ) {
         message.open({
@@ -185,11 +186,9 @@ const SetDiscountForm = () => {
             <Form layout="vertical" onFinish={handleSubmit}>
               <Row gutter={{ sm: 20 }}>
                 <Col md={{ span: 8 }} sm={12} xs={24}>
-                  {isGetSuccess && data.buyingPrice > 0 ? (
+                  {isGetSuccess && data.buyingPrice && data.buyingPrice > 0 ? (
                     <>
-                      <Typography>
-                        Item is: {"Another seller product"}
-                      </Typography>
+                      <Typography>Item is: Another seller product</Typography>
                       <Typography>
                         Buying price is: {data?.buyingPrice}
                       </Typography>
@@ -199,7 +198,7 @@ const SetDiscountForm = () => {
                     </>
                   ) : (
                     <>
-                      <Typography>Item Is: {"Our product"}</Typography>
+                      <Typography>Item Is: Our product</Typography>
                       <Typography>
                         Selling price is: {data?.sellingPrice}
                       </Typography>

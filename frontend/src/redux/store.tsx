@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { appApi } from "./rtkApi";
-import appActions from "./slices/appActions";
-import dataController from "./slices/dataController";
+import { appApi } from "../api/rtkApi";
+import appActions from "../slices/appActions";
+import dataController from "../slices/dataController";
 
 export const store = configureStore({
   reducer: {

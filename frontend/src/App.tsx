@@ -1,13 +1,16 @@
+import { useRoutes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./layouts/nav-bar";
-
-import Home from "./pages/home";
+import { router } from "./routes";
+import { LoginPage } from "./pages/log-in";
 
 function App() {
+  const element = useRoutes(router);
   return (
     <>
       <Navbar />
-      <Home />
+      <LoginPage />
+      {element}
     </>
   );
 }

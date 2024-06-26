@@ -49,7 +49,7 @@ export interface saleStoreTypes extends itemTypes {
   id: number;
   sellingPrice: number;
   salePrice: number;
-  sellingType: string;
+  // sellingType: string;
   salePercentage: number;
 }
 

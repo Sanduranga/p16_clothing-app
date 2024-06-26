@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Col, Drawer, Space, Typography } from "antd";
+import { Button, Col, Drawer, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { loggedIn, openDrawer, signInForm } from "../redux/slices/appActions";
-import LoginForm from "../components/login-form";
-import SigninForm from "../components/signinForm";
+import { RootState } from "../../redux/store";
+import { loggedIn, openDrawer, signInForm } from "../../slices/appActions";
+import LoginForm from "./sub-components/login-form";
+import SigninForm from "./sub-components/signinForm";
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const action = useSelector((state: RootState) => state.appController.drawer);
   const signIn = useSelector(
     (state: RootState) => state.appController.signInForm
@@ -67,5 +67,3 @@ const Login: React.FC = () => {
     </>
   );
 };
-
-export default Login;

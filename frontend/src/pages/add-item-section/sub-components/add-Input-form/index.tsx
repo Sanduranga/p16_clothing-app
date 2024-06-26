@@ -8,15 +8,15 @@ import {
   Typography,
   message,
 } from "antd";
-import { NormalStoreTypes } from "../types/types";
+import { NormalStoreTypes } from "../../../../types/types";
 import { useEffect, useRef, useState } from "react";
-import { CodeGenerater, normalStorePriceCal } from "../utils/utill";
+import { CodeGenerater, normalStorePriceCal } from "../../../../utils/utill";
 import {
   usePostItemMutation,
   useResetMutationStateMutation,
-} from "../redux/rtkApi";
+} from "../../../../api/rtkApi";
 
-const AddFormItems = () => {
+const AddInputForm = () => {
   const firstRender = useRef(true);
   const [getInputs, setGetInputs] = useState({
     buyingPrice: 0,
@@ -84,11 +84,8 @@ const AddFormItems = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("before", isSuccess);
       message.success("Item added successfully!");
       resetMutationState(postItem);
-      console.log("triggered");
-      console.log("after", isSuccess);
     }
     if (isError) {
       message.error("Something went wrong!");
@@ -365,4 +362,4 @@ const AddFormItems = () => {
   );
 };
 
-export default AddFormItems;
+export default AddInputForm;
