@@ -51,20 +51,16 @@ const StockGenerator: React.FC = ({}) => {
     ];
   }
 
+  const intialTable = fetchedAllDataArray;
+
   const [filteredArray, setFilteredArray] =
-    useState<fetchedAllDataArray[]>(fetchedAllDataArray);
+    useState<fetchedAllDataArray[]>(intialTable);
   const [filterInputs, setFilterInputs] = useState<inputTypes>({
     sellerName: "",
     status: "",
     itemType: "",
   });
-  const [chartData, setChartData] = useState({
-    normalStoreItems: 0,
-    saleStoreItems: 0,
-    stockClearingStoreItems: 0,
-  });
 
-  // let storeState = useRef<string | null>(null);
   let deleteCode = useRef("null"); // to catch the input item code going to be deleted.
 
   useEffect(() => {
@@ -74,14 +70,12 @@ const StockGenerator: React.FC = ({}) => {
         type: "success",
         content: "Item deleted successfully!",
       });
-    }
-    if (deletedError) {
+    } else if (deletedError) {
       messageApi.open({
         type: "error",
         content: "Item deleted failed!",
       });
-    }
-    if (isError) {
+    } else if (isError) {
       messageApi.open({
         type: "error",
         content: "Item getting error!",
@@ -91,6 +85,8 @@ const StockGenerator: React.FC = ({}) => {
   }, [deletedOk, isError, deletedError]);
 
   useEffect(() => {
+    setFilteredArray(fetchedAllDataArray);
+
     setChartData((prev) => ({
       ...prev,
       normalStoreItems: fetchedAllDataArray.filter(
@@ -157,7 +153,13 @@ const StockGenerator: React.FC = ({}) => {
         ) || [];
       setFilteredArray([...filtering_3]);
     }
-  }, [filterInputs, fetchedAllData]); // here I use fetchAllData into dependency array because once user delete the item, according to Rtkquerry validation tags, useGetCompositeDataQuery() data refetch. so due to change value of `fetchedAllData` useEffect hook is triggered and hence generator table data are updated.
+  }, [filterInputs, fetchedAllData]); // here I use fetchAllData into dependency array because once user delete the item, according to Rtkquerry validation tags, useGetCompositeDataQuery() data is also refetched. so then due to change value of `fetchedAllData` useEffect hook is triggered and hence generator table data are updated. Also change and by pressing generate button, filter inputs are also changed and then trigered this useEffect hook.
+
+  const [chartData, setChartData] = useState({
+    normalStoreItems: 0,
+    saleStoreItems: 0,
+    stockClearingStoreItems: 0,
+  });
 
   const handleSubmit = (data: inputTypes) => {
     // storeState.current = data.sellerName;
@@ -267,7 +269,6 @@ const StockGenerator: React.FC = ({}) => {
         </Form>
         <Col>
           <Input
-            name="sellerName"
             style={{ width: 250 }}
             placeholder="Enter the item code"
             onChange={(e) => {
