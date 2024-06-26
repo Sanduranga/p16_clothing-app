@@ -9,8 +9,8 @@ function App() {
   return (
     <>
       <Navbar />
-      <LoginPage />
       {element}
+      <LoginPage />
     </>
   );
 }

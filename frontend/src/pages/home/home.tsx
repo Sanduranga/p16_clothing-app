@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useGetCompositeDataQuery } from "../../api/rtkApi";
 import { fetchedAllDataArray } from "../my-store/sub-components/stock-generator";
 import { RootState } from "../../redux/store";
-import { LoginPage } from "../log-in";
 
 const Home: React.FC = () => {
   const { data, isLoading, isSuccess } = useGetCompositeDataQuery();
@@ -107,7 +106,6 @@ const Home: React.FC = () => {
         }}
         dataSource={fetchedAllDataArray}
       ></List>
-      <LoginPage />
     </div>
   );
 };
