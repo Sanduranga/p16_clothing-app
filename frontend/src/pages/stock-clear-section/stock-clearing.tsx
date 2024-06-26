@@ -1,17 +1,9 @@
-import { Badge, Button, Card, Image, List, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Badge, Card, Image, List, Typography } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { useGetAllSalesItemsQuery } from "../../api/rtkApi";
-import { RootState } from "../../redux/store";
+import { useGetAllStockItemsQuery } from "../../api";
 
 const StockClearingItems: React.FC = () => {
-  const { data, isLoading } = useGetAllSalesItemsQuery();
-  // const logged = useSelector(
-  //   (state: RootState) => state.appController.loggedUser.loggedIn
-  // );
-  // const navigate = useNavigate();
-  // console.log("saleitems page");
+  const { data, isLoading } = useGetAllStockItemsQuery();
 
   return (
     <div>
@@ -47,7 +39,7 @@ const StockClearingItems: React.FC = () => {
                       title={
                         <Typography.Paragraph>
                           Price: Rs
-                          {products.salePrice}
+                          {products.stockClearingPrice}
                         </Typography.Paragraph>
                       }
                       description={

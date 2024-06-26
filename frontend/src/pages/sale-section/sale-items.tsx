@@ -1,14 +1,9 @@
 import { Badge, Card, Image, List, Typography } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { useGetAllSalesItemsQuery } from "../../api/rtkApi";
-import { RootState } from "../../redux/store";
+import { useGetAllSaleItemsQuery } from "../../api";
 
 export const SaleItems: React.FC = () => {
-  const { data, isLoading } = useGetAllSalesItemsQuery();
-  // const logged = useSelector(
-  //   (state: RootState) => state.appController.loggedUser.loggedIn
-  // );
+  const { data, isLoading } = useGetAllSaleItemsQuery();
 
   return (
     <div>

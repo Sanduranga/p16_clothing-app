@@ -2,7 +2,7 @@ import { Carousel, Col, Image, Row, Spin, message } from "antd";
 import React from "react";
 import Navbar from "../layouts/nav-bar";
 import ItemDescription from "../components/item-description";
-import { useGetOneItemQuery } from "../api/rtkApi";
+import { useGetOneItemQuery } from "../api";
 import { useParams } from "react-router-dom";
 
 const contentStyle: React.CSSProperties = {

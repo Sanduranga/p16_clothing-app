@@ -1,14 +1,10 @@
 import { Table, TableProps, Tag, Typography } from "antd";
-import { fetchedAllDataArray } from "./stock-generator";
+import { NormalStoreTypes } from "../../../types/types";
 
-const GeneratorTable = ({
-  tableData,
-}: {
-  tableData: fetchedAllDataArray[];
-}) => {
+const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
   const { Text } = Typography;
 
-  const columns: TableProps<fetchedAllDataArray>["columns"] = [
+  const columns: TableProps<NormalStoreTypes>["columns"] = [
     {
       title: "Code",
       dataIndex: "code",
@@ -63,8 +59,8 @@ const GeneratorTable = ({
     {
       title: "Buying/Starting price",
       dataIndex: "buyingPrice",
-      render: (_, { buyingPrice, sellingPrice, sellerName }) =>
-        sellerName === "entgraItems" ? sellingPrice : buyingPrice,
+      render: (_, { buyingPrice, startingPrice }) =>
+        `${buyingPrice}/${startingPrice}`,
     },
     {
       title: "Percentage",
@@ -86,12 +82,12 @@ const GeneratorTable = ({
     {
       title: "Display price",
       key: "selling price",
-      render: (_, { salePrice, sellingPrice, stockClearingPrice }) =>
+      render: (_, { salePrice, startingPrice, stockClearingPrice }) =>
         salePrice
           ? salePrice
           : stockClearingPrice
           ? stockClearingPrice
-          : sellingPrice,
+          : startingPrice,
     },
   ];
   return <Table columns={columns} dataSource={tableData} />;

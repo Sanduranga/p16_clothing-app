@@ -34,41 +34,26 @@ export interface itemTypes {
   description: string;
   itemType: string;
   code: string;
-  numberOfItems: number;
   status: string;
+  numberOfItems: number;
   buyingPrice?: number;
+  startingPrice: number;
+  profitPercentage?: number | null;
+  salePrice?: number | null;
+  salePercentage?: number | null;
+  stockClearingPrice?: number | null; // 12 variables
 }
 
 export interface NormalStoreTypes extends itemTypes {
   id?: number;
-  sellingPrice: number;
-  profitPercentage: number;
 }
 
-export interface saleStoreTypes extends itemTypes {
+export interface allDataTypes extends itemTypes {
   id: number;
-  sellingPrice: number;
-  salePrice: number;
-  // sellingType: string;
-  salePercentage: number;
-}
-
-export interface stockClearingTypes extends itemTypes {
-  id: number;
-  sellingPrice: number;
-  stockClearingPrice: number;
-}
-
-export interface allDataTypes
-  extends itemTypes,
-    saleStoreTypes,
-    stockClearingTypes {
-  sellingPrice: number;
-  profitPercentage: number;
 }
 
 export interface composeDataObjects {
   itemsData: NormalStoreTypes[];
-  saleItemsData: saleStoreTypes[];
-  stockClearItemsData: stockClearingTypes[];
+  saleItemsData: allDataTypes[];
+  stockClearItemsData: allDataTypes[];
 }
