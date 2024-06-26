@@ -136,7 +136,6 @@ const Home: React.FC = () => {
                       preview={false}
                       className="itemCardImage"
                       src={"bag.jpg"}
-                      onClick={() => navigate(`/clicked-item/${products.id}`)}
                     />
                   }
                   loading={isLoading}
