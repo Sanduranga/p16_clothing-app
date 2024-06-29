@@ -46,6 +46,14 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh1", "refresh2"],
     }),
+    updateItem: builder.mutation<void, NormalStoreTypes>({
+      query: (data) => ({
+        url: "items/update-item",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["refresh1", "refresh2"],
+    }),
     deleteItem: builder.mutation<void, number>({
       query: (id) => ({
         url: `items/delete-item?id=${id}`,
@@ -113,6 +121,7 @@ export const {
   useGetAllItemsQuery,
   useGetOneItemQuery,
   usePostItemMutation,
+  useUpdateItemMutation,
   useDeleteItemMutation,
   useGetAllSaleItemsQuery,
   useGetOneSaleItemQuery,
