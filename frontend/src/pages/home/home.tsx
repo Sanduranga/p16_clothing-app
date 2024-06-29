@@ -3,23 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
-  useDeleteCompositeDataMutation,
+  useDeleteStockItemMutation,
   useGetCompositeDataQuery,
   usePostItemMutation,
   useResetMutationStateMutation,
+  useUpdateItemMutation,
 } from "../../api";
 import { NormalStoreTypes } from "../../types/types";
 
 const Home: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
+
+  const deleteCode = useRef<number | null>(null);
+
+  const logged = useSelector(
+    (state: RootState) => state.appController.loggedUser.loggedIn
+  );
 
   const { data, isLoading, isSuccess, isError } = useGetCompositeDataQuery();
   const [postItem, { isSuccess: postSuccess, isError: postError }] =
     usePostItemMutation();
-  const [deleteCompositeData] = useDeleteCompositeDataMutation();
   const [resetMutationState] = useResetMutationStateMutation();
+  const [deleteStockItem] = useDeleteStockItemMutation();
+  const [updateItem] = useUpdateItemMutation();
 
   let fetchedAllDataArray: NormalStoreTypes[] = [];
 
@@ -45,6 +54,13 @@ const Home: React.FC = () => {
         type: "success",
         content: "item reset to normal section successfully!",
       });
+
+      if (deleteCode.current !== null) {
+        console.log("enter to ref");
+
+        deleteStockItem(deleteCode.current);
+        deleteCode.current = null;
+      }
     }
     if (postError) {
       messageApi.open({
@@ -54,11 +70,6 @@ const Home: React.FC = () => {
     }
     resetMutationState(postItem);
   }, [isError, postSuccess, postError]);
-
-  const logged = useSelector(
-    (state: RootState) => state.appController.loggedUser.loggedIn
-  );
-  const navigate = useNavigate();
 
   return (
     <div style={{ margin: 20 }}>
@@ -70,7 +81,7 @@ const Home: React.FC = () => {
           sm: 2,
           md: 3,
           lg: 4,
-          xl: 5,
+          xl: 4,
           xxl: 6,
         }}
         renderItem={(products, index) => {
@@ -105,26 +116,37 @@ const Home: React.FC = () => {
                       </Button>
                     ) : logged ? (
                       <Button
-                        onClick={() => {
-                          postItem({
-                            itemColor: products.itemColor,
-                            itemTitle: products.itemTitle,
-                            itemSize: products.itemSize,
-                            itemType: products.itemType,
-                            materialName: products.materialName,
-                            sellerName: products.sellerName,
-                            buyingPrice: products.buyingPrice,
-                            profitPercentage: products.profitPercentage,
-                            startingPrice: products.startingPrice,
-                            description: products.description,
-                            code: products.code,
-                            numberOfItems: products.numberOfItems,
-                            status: "normalStore",
-                            salePrice: null,
-                            salePercentage: null,
-                            stockClearingPrice: null,
-                          });
-                          deleteCompositeData(products.code);
+                        type="primary"
+                        onClick={async () => {
+                          try {
+                            await updateItem({
+                              itemColor: products.itemColor,
+                              itemTitle: products.itemTitle,
+                              itemSize: products.itemSize,
+                              itemType: products.itemType,
+                              materialName: products.materialName,
+                              sellerName: products.sellerName,
+                              buyingPrice: products.buyingPrice,
+                              profitPercentage: products.profitPercentage,
+                              startingPrice: products.startingPrice,
+                              description: products.description,
+                              code: products.code,
+                              numberOfItems: products.numberOfItems,
+                              status: "normalStore",
+                              salePrice: null,
+                              salePercentage: null,
+                              stockClearingPrice: null,
+                            }).unwrap();
+                            // await deleteCompositeData(products.code).unwrap();
+                            deleteCode.current = products.id
+                              ? products.id
+                              : null;
+                          } catch (error) {
+                            messageApi.open({
+                              type: "error",
+                              content: "Item resetting failed!",
+                            });
+                          }
                         }}
                       >
                         Undo discount

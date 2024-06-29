@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { itemTypes } from "../../types/types";
+import { itemTypes } from "../types/types";
 
 interface stateTypes {
   allFetchedData: itemTypes[];

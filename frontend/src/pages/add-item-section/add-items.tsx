@@ -13,9 +13,12 @@ import { useEffect, useRef, useState } from "react";
 import { CodeGenerater, normalStorePriceCal } from "../../utils/utill";
 import { usePostItemMutation } from "../../api";
 import { useResetMutationStateMutation } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 export const AddItems = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
+
   const firstRender = useRef(true);
   const [getInputs, setGetInputs] = useState({
     buyingPrice: 0,
@@ -87,6 +90,7 @@ export const AddItems = () => {
         type: "success",
         content: "Item added successfully!",
       });
+      // navigate("/");
     }
     if (isError) {
       messageApi.open({
