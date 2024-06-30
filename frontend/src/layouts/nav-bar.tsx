@@ -6,7 +6,6 @@ import { openDrawer } from "../slices/appActions";
 import { RootState } from "../redux/store";
 
 const Navbar = () => {
-  // const { login, register, isAuthenticated, logout } = useKindeAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,17 +22,6 @@ const Navbar = () => {
   const handlelogin = () => {
     dispatch(openDrawer());
   };
-
-  // const registerfunc = () => {
-  //   register();
-  // };
-  // const loginfunc = () => {
-  //   if (isAuthenticated) {
-  //     logout();
-  //   } else {
-  //     login();
-  //   }
-  // };
 
   return (
     <div className="navBar">
@@ -58,9 +46,6 @@ const Navbar = () => {
       />
       <Typography.Title level={2}>Entgra Store</Typography.Title>
       <div className="cartLogin">
-        {/* <Typography.Title style={{ cursor: "pointer" }} level={2}>
-          <ShoppingCartOutlined />
-        </Typography.Title> */}
         {loggedIn && (
           <>
             <Link style={{ textDecoration: "none" }} to={"/add-items"}>
@@ -93,11 +78,6 @@ const Navbar = () => {
         >
           {loggedIn ? `Hi ${truncatedName}` : "Login"}
         </Typography.Title>
-        {/* 
-        <Button onClick={registerfunc}>Register</Button>
-        <Button onClick={loginfunc}>
-          {isAuthenticated ? `Log out` : `Log In`}
-        </Button> */}
       </div>
     </div>
   );
