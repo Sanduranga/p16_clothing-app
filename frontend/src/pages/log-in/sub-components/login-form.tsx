@@ -9,10 +9,11 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const onLogin = async (data: userlogingTypes) => {
+    // here I use javascript default fetch api to deal with backend..
     try {
       setLoad(true);
       const res = await fetch(
-        `http://localhost:8080/api/users/get-user?email=${data.email}`
+        `http://localhost:8080/api/users/get-user?email=${data.email}&password=${data.password}`
       );
       const loggedUser = await res.json();
 
@@ -26,7 +27,13 @@ const LoginForm = () => {
           content: "Logged in successfully!",
         });
       }
-      if (!res.ok) {
+      if (res.status === 401) {
+        setLoad(false);
+        message.open({
+          type: "error",
+          content: "Incorrect password!",
+        });
+      } else if (!res.ok) {
         setLoad(false);
         message.open({
           type: "error",
