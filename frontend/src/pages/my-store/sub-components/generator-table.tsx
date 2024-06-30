@@ -45,7 +45,7 @@ const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
       render: (_, { status }) => (
         <Tag
           color={`${
-            status === "sale"
+            status === "saleStore"
               ? "yellow"
               : status === "normalStore"
               ? "green"
@@ -71,7 +71,7 @@ const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
             <>
               <Text type="success">(+{profitPercentage}%)</Text>
             </>
-          ) : status === "sale" ? (
+          ) : status === "saleStore" ? (
             <Text type="warning">(-{salePercentage}%)</Text>
           ) : (
             <Text type="danger">-</Text>

@@ -10,17 +10,13 @@ import {
   message,
 } from "antd";
 import { saleStorePriceCal } from "../../utils/utill";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDeleteItemMutation, useGetOneItemQuery } from "../../api";
+import { useGetOneItemQuery, useUpdateItemMutation } from "../../api";
 import { allDataTypes } from "../../types/types";
-import { usePostSaleItemMutation } from "../../api";
-import { usePostStockItemMutation } from "../../api";
 import { useResetMutationStateMutation } from "../../api";
 
 export const SetDiscount = () => {
-  const firstRender = useRef(true);
-
   const [getInputs, setGetInputs] = useState({
     salePercentage: 0,
     salePrice: 0,
@@ -40,14 +36,13 @@ export const SetDiscount = () => {
     skip: !code,
   });
   const [
-    postSaleItem,
-    { isLoading: IsLoadingSaleItem, isSuccess: IsSuccessSaleItem },
-  ] = usePostSaleItemMutation();
-  const [
-    postStockClearItem,
-    { isLoading: IsLoadingStockItem, isSuccess: IsSuccessStockItem },
-  ] = usePostStockItemMutation();
-  const [deleteItem] = useDeleteItemMutation();
+    updateItem,
+    {
+      isLoading: IsLoadingUpdateItem,
+      isSuccess: IsSuccessUpdateItem,
+      isError: IsUpdateError,
+    },
+  ] = useUpdateItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   const handleSelectChange = (value: string, name: string) => {
@@ -58,10 +53,6 @@ export const SetDiscount = () => {
   };
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
     if (isGetSuccess) {
       const aa = saleStorePriceCal(
         getInputs.salePercentage,
@@ -79,26 +70,22 @@ export const SetDiscount = () => {
       });
     }
     if (isGetSuccess) {
-      if (IsSuccessSaleItem) {
+      if (IsSuccessUpdateItem) {
         message.open({
           type: "success",
-          content: "Added to sale storage successfully!",
+          content: "moved item successfully!",
         });
-        deleteItem(data.id);
-        resetMutationState(postSaleItem);
+        resetMutationState(updateItem);
+        navigate(-1);
       }
-      if (IsSuccessStockItem) {
-        message.open({
-          type: "success",
-          content: "Added stock clear storage successfully!",
-        });
-        deleteItem(data.id);
-        resetMutationState(postStockClearItem);
-      }
-      navigate(-1);
     }
-    resetMutationState(deleteItem);
-  }, [error, IsSuccessStockItem, IsSuccessSaleItem]);
+    if (IsUpdateError) {
+      message.open({
+        type: "error",
+        content: "Item moving error!",
+      });
+    }
+  }, [error, IsSuccessUpdateItem, IsUpdateError]);
 
   const handleSubmit = (submitData: allDataTypes) => {
     if (isGetSuccess) {
@@ -115,7 +102,7 @@ export const SetDiscount = () => {
       }
 
       if (submitData.status === "sale") {
-        postSaleItem({
+        updateItem({
           id: data.id,
           itemColor: data.itemColor,
           itemSize: data.itemSize,
@@ -128,14 +115,14 @@ export const SetDiscount = () => {
           startingPrice: data.startingPrice,
           salePrice: getInputs.salePrice,
           description: data.description,
-          status: submitData.status,
+          status: "saleStore",
           code: data.code,
           numberOfItems: data.numberOfItems,
           stockClearingPrice: null,
           profitPercentage: data.profitPercentage,
         });
       } else {
-        postStockClearItem({
+        updateItem({
           id: data.id,
           itemColor: data.itemColor,
           itemSize: data.itemSize,
@@ -147,7 +134,7 @@ export const SetDiscount = () => {
           stockClearingPrice: getInputs.stockClearingPrice,
           startingPrice: data.startingPrice,
           description: data.description,
-          status: submitData.status,
+          status: "stockClearingStore",
           code: data.code,
           numberOfItems: data.numberOfItems,
           salePercentage: null,
@@ -282,10 +269,7 @@ export const SetDiscount = () => {
                 </Col>
               </Row>
               <Form.Item>
-                <Button
-                  loading={IsLoadingSaleItem || IsLoadingStockItem}
-                  htmlType="submit"
-                >
+                <Button loading={IsLoadingUpdateItem} htmlType="submit">
                   Submit
                 </Button>
               </Form.Item>

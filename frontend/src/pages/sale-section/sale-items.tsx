@@ -1,9 +1,8 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
-  useDeleteCompositeDataMutation,
-  useGetAllSaleItemsQuery,
-  usePostItemMutation,
+  useGetAllItemsQuery,
+  useUpdateItemMutation,
   useResetMutationStateMutation,
 } from "../../api";
 import { useEffect } from "react";
@@ -16,10 +15,9 @@ export const SaleItems: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllSaleItemsQuery();
-  const [postItem, { isSuccess: postSuccess, isError: postError }] =
-    usePostItemMutation();
-  const [deleteCompositeData] = useDeleteCompositeDataMutation();
+  const { data, isLoading, isError } = useGetAllItemsQuery();
+  const [updateItem, { isSuccess: updateSuccess, isError: updateError }] =
+    useUpdateItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
@@ -29,21 +27,21 @@ export const SaleItems: React.FC = () => {
         content: "Item getting failed",
       });
     }
-    if (postSuccess) {
+    if (updateSuccess) {
       messageApi.open({
         type: "success",
         content: "item reset to normal section successfully!",
       });
     }
-    if (postError) {
+    if (updateError) {
       messageApi.open({
         type: "error",
         content: "item reset to normal section failed!",
       });
     }
 
-    resetMutationState(postItem);
-  }, [isError, postSuccess, postError]);
+    resetMutationState(updateItem);
+  }, [isError, updateSuccess, updateError]);
 
   return (
     <div style={{ margin: 20 }}>
@@ -62,73 +60,74 @@ export const SaleItems: React.FC = () => {
           return (
             <List.Item key={index}>
               {contextHolder}
-              <Badge.Ribbon
-                text={`${products.salePercentage}% sale`}
-                color={"yellow"}
-              >
-                <Card
-                  title={products.itemTitle}
-                  actions={[
-                    <ShoppingCartOutlined />,
-                    logged && (
-                      <Button
-                        type="primary"
-                        onClick={() => {
-                          postItem({
-                            itemColor: products.itemColor,
-                            itemTitle: products.itemTitle,
-                            itemSize: products.itemSize,
-                            itemType: products.itemType,
-                            materialName: products.materialName,
-                            sellerName: products.sellerName,
-                            buyingPrice: products.buyingPrice,
-                            profitPercentage: products.profitPercentage,
-                            startingPrice: products.startingPrice,
-                            description: products.description,
-                            code: products.code,
-                            numberOfItems: products.numberOfItems,
-                            status: "normalStore",
-                            salePrice: null,
-                            salePercentage: null,
-                            stockClearingPrice: null,
-                          });
-                          deleteCompositeData(products.code);
-                        }}
-                      >
-                        Undo discount
-                      </Button>
-                    ),
-                  ]}
-                  cover={
-                    <Image
-                      preview={false}
-                      className="itemCardImage"
-                      src={"bag.jpg"}
-                    />
-                  }
-                  loading={isLoading}
+              {products.status === "saleStore" ? (
+                <Badge.Ribbon
+                  text={`${products.salePercentage}% sale`}
+                  color={"yellow"}
                 >
-                  <Card.Meta
-                    title={
-                      <Typography.Paragraph>
-                        Price: Rs
-                        {products.salePrice}
-                      </Typography.Paragraph>
+                  <Card
+                    title={products.itemTitle}
+                    actions={[
+                      <ShoppingCartOutlined />,
+                      logged && (
+                        <Button
+                          type="primary"
+                          onClick={() => {
+                            updateItem({
+                              itemColor: products.itemColor,
+                              itemTitle: products.itemTitle,
+                              itemSize: products.itemSize,
+                              itemType: products.itemType,
+                              materialName: products.materialName,
+                              sellerName: products.sellerName,
+                              buyingPrice: products.buyingPrice,
+                              profitPercentage: products.profitPercentage,
+                              startingPrice: products.startingPrice,
+                              description: products.description,
+                              code: products.code,
+                              numberOfItems: products.numberOfItems,
+                              status: "normalStore",
+                              salePrice: null,
+                              salePercentage: null,
+                              stockClearingPrice: null,
+                            });
+                          }}
+                        >
+                          Undo discount
+                        </Button>
+                      ),
+                    ]}
+                    cover={
+                      <Image
+                        preview={false}
+                        className="itemCardImage"
+                        src={"bag.jpg"}
+                      />
                     }
-                    description={
-                      <Typography.Paragraph
-                        ellipsis={{
-                          rows: 2,
-                          expandable: true,
-                          symbol: "more",
-                        }}
-                      >
-                        {products.description}
-                      </Typography.Paragraph>
-                    }
-                  ></Card.Meta>
-                </Card>
-              </Badge.Ribbon>
+                    loading={isLoading}
+                  >
+                    <Card.Meta
+                      title={
+                        <Typography.Paragraph>
+                          Price: Rs
+                          {products.salePrice}
+                        </Typography.Paragraph>
+                      }
+                      description={
+                        <Typography.Paragraph
+                          ellipsis={{
+                            rows: 2,
+                            expandable: true,
+                            symbol: "more",
+                          }}
+                        >
+                          {products.description}
+                        </Typography.Paragraph>
+                      }
+                    ></Card.Meta>
+                  </Card>
+                </Badge.Ribbon>
+              ) : null}
             </List.Item>
           );
         }}

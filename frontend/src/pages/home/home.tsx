@@ -3,44 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
-  useDeleteStockItemMutation,
-  useGetCompositeDataQuery,
-  usePostItemMutation,
-  useResetMutationStateMutation,
+  useGetAllItemsQuery,
   useUpdateItemMutation,
+  useResetMutationStateMutation,
 } from "../../api";
-import { NormalStoreTypes } from "../../types/types";
 
 const Home: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
 
-  const deleteCode = useRef<number | null>(null);
-
   const logged = useSelector(
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isSuccess, isError } = useGetCompositeDataQuery();
-  const [postItem, { isSuccess: postSuccess, isError: postError }] =
-    usePostItemMutation();
+  const { data, isLoading, isError } = useGetAllItemsQuery();
+  const [updateItem, { isSuccess: postSuccess, isError: postError }] =
+    useUpdateItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
-  const [deleteStockItem] = useDeleteStockItemMutation();
-  const [updateItem] = useUpdateItemMutation();
-
-  let fetchedAllDataArray: NormalStoreTypes[] = [];
-
-  if (isSuccess) {
-    const { itemsData, saleItemsData, stockClearItemsData } = data;
-    // destructuring fetched all data and assigned them into one array call `fetchedAllDataArray`
-    fetchedAllDataArray = [
-      ...itemsData,
-      ...saleItemsData,
-      ...stockClearItemsData,
-    ];
-  }
 
   useEffect(() => {
     if (isError) {
@@ -54,13 +35,6 @@ const Home: React.FC = () => {
         type: "success",
         content: "item reset to normal section successfully!",
       });
-
-      if (deleteCode.current !== null) {
-        console.log("enter to ref");
-
-        deleteStockItem(deleteCode.current);
-        deleteCode.current = null;
-      }
     }
     if (postError) {
       messageApi.open({
@@ -68,7 +42,7 @@ const Home: React.FC = () => {
         content: "item reset to normal section failed!",
       });
     }
-    resetMutationState(postItem);
+    resetMutationState(updateItem);
   }, [isError, postSuccess, postError]);
 
   return (
@@ -90,16 +64,16 @@ const Home: React.FC = () => {
               {contextHolder}
               <Badge.Ribbon
                 text={
-                  products.status === "sale"
+                  products.status === "saleStore"
                     ? `${products.salePercentage}% sale`
-                    : products.status === "stockClearing"
+                    : products.status === "stockClearingStore"
                     ? "stock clearing"
                     : null
                 }
                 color={
-                  products.status === "sale"
+                  products.status === "saleStore"
                     ? "yellow"
-                    : products.status === "stockClearing"
+                    : products.status === "stockClearingStore"
                     ? "red"
                     : "white"
                 }
@@ -120,6 +94,7 @@ const Home: React.FC = () => {
                         onClick={async () => {
                           try {
                             await updateItem({
+                              id: products.id,
                               itemColor: products.itemColor,
                               itemTitle: products.itemTitle,
                               itemSize: products.itemSize,
@@ -137,10 +112,6 @@ const Home: React.FC = () => {
                               salePercentage: null,
                               stockClearingPrice: null,
                             }).unwrap();
-                            // await deleteCompositeData(products.code).unwrap();
-                            deleteCode.current = products.id
-                              ? products.id
-                              : null;
                           } catch (error) {
                             messageApi.open({
                               type: "error",
@@ -166,9 +137,9 @@ const Home: React.FC = () => {
                     title={
                       <Typography.Paragraph>
                         Price: Rs
-                        {products.status === "sale"
+                        {products.status === "saleStore"
                           ? products.salePrice
-                          : products.status === "stockClearing"
+                          : products.status === "stockClearingStore"
                           ? products.stockClearingPrice
                           : products.startingPrice}
                       </Typography.Paragraph>
@@ -186,7 +157,7 @@ const Home: React.FC = () => {
             </List.Item>
           );
         }}
-        dataSource={fetchedAllDataArray}
+        dataSource={data}
       ></List>
     </div>
   );

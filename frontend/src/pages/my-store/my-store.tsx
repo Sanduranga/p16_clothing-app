@@ -5,8 +5,8 @@ import { Doughnut } from "react-chartjs-2";
 import { NormalStoreTypes } from "../../types/types";
 import GeneratorTable from "./sub-components/generator-table";
 import {
-  useDeleteCompositeDataMutation,
-  useGetCompositeDataQuery,
+  useDeleteItemMutation,
+  useGetAllItemsQuery,
   useResetMutationStateMutation,
 } from "../../api";
 
@@ -21,25 +21,15 @@ interface inputTypes {
 export const MyStore: React.FC = ({}) => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const {
-    data: fetchedAllData,
-    isSuccess,
-    isError,
-  } = useGetCompositeDataQuery(); // get all items
-  const [deleteCompositeData, { isSuccess: deletedOk, isError: deletedError }] =
-    useDeleteCompositeDataMutation();
+  const { data, isSuccess, isError } = useGetAllItemsQuery(); // get all items
+  const [deleteItem, { isSuccess: deletedOk, isError: deletedError }] =
+    useDeleteItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   let fetchedAllDataArray = [] as NormalStoreTypes[];
 
   if (isSuccess) {
-    const { itemsData, saleItemsData, stockClearItemsData } = fetchedAllData;
-    // destructuring fetched all data and assigned them into one array call `fetchedAllDataArray`
-    fetchedAllDataArray = [
-      ...itemsData,
-      ...saleItemsData,
-      ...stockClearItemsData,
-    ];
+    fetchedAllDataArray = [...data];
   }
 
   const intialTable = fetchedAllDataArray;
@@ -72,22 +62,23 @@ export const MyStore: React.FC = ({}) => {
         content: "Item getting failed!",
       });
     }
-    resetMutationState(deleteCompositeData);
+    resetMutationState(deleteItem);
   }, [deletedOk, isError, deletedError]);
 
   useEffect(() => {
-    setFilteredArray(fetchedAllDataArray);
+    setFilteredArray(fetchedAllDataArray); // set default table data
 
+    //setting chart data
     setChartData((prev) => ({
       ...prev,
       normalStoreItems: fetchedAllDataArray.filter(
         (item) => item.status === "normalStore"
       ).length,
       saleStoreItems: fetchedAllDataArray.filter(
-        (item) => item.status === "sale"
+        (item) => item.status === "saleStore"
       ).length,
       stockClearingStoreItems: fetchedAllDataArray.filter(
-        (item) => item.status === "stockClearing"
+        (item) => item.status === "stockClearingStore"
       ).length,
     }));
 
@@ -144,7 +135,7 @@ export const MyStore: React.FC = ({}) => {
         ) || [];
       setFilteredArray([...filtering_3]);
     }
-  }, [filterInputs, fetchedAllData]); // here I use fetchAllData into dependency array because once user delete the item, according to Rtkquerry validation tags, useGetCompositeDataQuery() data is also refetched. so then due to change value of `fetchedAllData` useEffect hook is triggered and hence generator table data are updated. Also change and by pressing generate button, filter inputs are also changed and then trigered this useEffect hook.
+  }, [filterInputs, data]); // here I use fetchAllData into dependency array because once user delete the item, according to Rtkquerry validation tags, useGetCompositeDataQuery() data is also refetched. so then due to change value of `fetchedAllData` useEffect hook is triggered and hence generator table data are updated. Also change and by pressing generate button, filter inputs are also changed and then trigered this useEffect hook.
 
   const [chartData, setChartData] = useState({
     normalStoreItems: 0,
@@ -231,8 +222,8 @@ export const MyStore: React.FC = ({}) => {
               allowClear
               options={[
                 { value: "normalStore", label: "Normal Store" },
-                { value: "sale", label: "Sale Store" },
-                { value: "stockClearing", label: "Stock clearing" },
+                { value: "saleStore", label: "Sale Store" },
+                { value: "stockClearingStore", label: "Stock clearing" },
               ]}
             />
           </Form.Item>
@@ -273,7 +264,7 @@ export const MyStore: React.FC = ({}) => {
           danger
           style={{ margin: 20 }}
           onClick={() => {
-            deleteCompositeData(deleteCode.current);
+            deleteItem(deleteCode.current);
             deleteCode.current = "";
           }}
         >
