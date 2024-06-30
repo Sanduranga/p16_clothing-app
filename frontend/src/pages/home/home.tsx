@@ -47,6 +47,7 @@ const Home: React.FC = () => {
 
   return (
     <div style={{ margin: 20 }}>
+      {contextHolder}
       <List
         loading={isLoading}
         grid={{
@@ -61,7 +62,6 @@ const Home: React.FC = () => {
         renderItem={(products, index) => {
           return (
             <List.Item key={index}>
-              {contextHolder}
               <Badge.Ribbon
                 text={
                   products.status === "saleStore"
@@ -84,7 +84,9 @@ const Home: React.FC = () => {
                     <ShoppingCartOutlined />,
                     logged && products.status === "normalStore" ? (
                       <Button
+                        type="primary"
                         onClick={() => navigate(`/set-discount/${products.id}`)}
+                        style={{ padding: 2 }}
                       >
                         Set discount
                       </Button>

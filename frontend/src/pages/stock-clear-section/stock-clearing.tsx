@@ -44,6 +44,7 @@ const StockClearingItems: React.FC = () => {
 
   return (
     <div style={{ margin: 20 }}>
+      {contextHolder}
       <List
         loading={isLoading}
         grid={{
@@ -58,7 +59,6 @@ const StockClearingItems: React.FC = () => {
         renderItem={(products, index) => {
           return (
             <List.Item key={index}>
-              {contextHolder}
               {products.status === "saleStore" ? (
                 <Badge.Ribbon text={"stockclear"} color={"red"}>
                   <Card
@@ -68,6 +68,7 @@ const StockClearingItems: React.FC = () => {
                       logged && (
                         <Button
                           type="primary"
+                          style={{ padding: 2 }}
                           onClick={() => {
                             updateItem({
                               itemColor: products.itemColor,

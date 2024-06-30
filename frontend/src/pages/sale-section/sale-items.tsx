@@ -21,30 +21,39 @@ export const SaleItems: React.FC = () => {
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
-    if (isError) {
-      messageApi.open({
-        type: "error",
-        content: "Item getting failed",
-      });
-    }
-    if (updateSuccess) {
-      messageApi.open({
-        type: "success",
-        content: "item reset to normal section successfully!",
-      });
-    }
-    if (updateError) {
-      messageApi.open({
-        type: "error",
-        content: "item reset to normal section failed!",
-      });
-    }
+    try {
+      if (isError) {
+        messageApi.open({
+          type: "error",
+          content: "Item getting failed",
+        });
+      }
+      if (updateSuccess) {
+        messageApi.open({
+          type: "success",
+          content: "item reset to normal section successfully!",
+        });
+      }
+      if (updateError) {
+        messageApi.open({
+          type: "error",
+          content: "item reset to normal section failed!",
+        });
+      }
+      resetMutationState(updateItem);
+    } catch (error) {
+      console.log("error");
 
-    resetMutationState(updateItem);
+      messageApi.open({
+        type: "error",
+        content: "Item getting failed!",
+      });
+    }
   }, [isError, updateSuccess, updateError]);
 
   return (
     <div style={{ margin: 20 }}>
+      {contextHolder}
       <List
         loading={isLoading}
         grid={{
@@ -59,7 +68,6 @@ export const SaleItems: React.FC = () => {
         renderItem={(products, index) => {
           return (
             <List.Item key={index}>
-              {contextHolder}
               {products.status === "saleStore" ? (
                 <Badge.Ribbon
                   text={`${products.salePercentage}% sale`}
@@ -72,6 +80,7 @@ export const SaleItems: React.FC = () => {
                       logged && (
                         <Button
                           type="primary"
+                          style={{ padding: 2 }}
                           onClick={() => {
                             updateItem({
                               itemColor: products.itemColor,
