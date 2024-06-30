@@ -44,7 +44,6 @@ const Navbar = () => {
           },
         ]}
       />
-      <Typography.Title level={2}>Entgra Store</Typography.Title>
       <div className="cartLogin">
         {loggedIn && (
           <>
