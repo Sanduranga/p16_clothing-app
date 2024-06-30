@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { userlogingTypes } from "../../../types/types";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import { useState } from "react";
 const SigninForm = () => {
   const dispatch = useDispatch();
   const [load, setLoad] = useState(false);
-  const [userType, setUserType] = useState<"buyer" | "seller">("buyer");
 
   const onSignUp = async (data: userlogingTypes) => {
     setLoad(true);
@@ -21,7 +20,6 @@ const SigninForm = () => {
         name: data.name,
         email: data.email,
         password: data.password,
-        userType: userType,
       }),
     });
     if (res.ok) {
@@ -31,7 +29,13 @@ const SigninForm = () => {
         content: "Registered successfully!",
       });
     }
-    if (!res.ok) {
+    if (res.status === 401) {
+      setLoad(false);
+      message.open({
+        type: "error",
+        content: "The email is already taken!",
+      });
+    } else if (!res.ok) {
       setLoad(false);
       message.open({
         type: "error",
@@ -39,6 +43,15 @@ const SigninForm = () => {
       });
     }
   };
+
+  const validatePasswords = ({ getFieldValue }: any) => ({
+    validator(_: any, value: string) {
+      if (!value || getFieldValue("password") === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("The two passwords do not match!"));
+    },
+  });
 
   return (
     <div>
@@ -66,17 +79,7 @@ const SigninForm = () => {
         >
           <Input placeholder="Enter your email.." />
         </Form.Item>
-        <Form.Item>
-          <Select
-            defaultValue="buyer"
-            style={{ width: 120 }}
-            onChange={(value) => setUserType(value as "buyer" | "seller")}
-            options={[
-              { value: "buyer", label: "Buyer" },
-              { value: "seller", label: "Seller" },
-            ]}
-          />
-        </Form.Item>
+
         <Form.Item
           rules={[
             {
@@ -89,13 +92,15 @@ const SigninForm = () => {
           <Input.Password placeholder="Enter your password" />
         </Form.Item>
         <Form.Item
+          name="password2"
+          dependencies={["password"]}
           rules={[
             {
               required: true,
               message: "Please enter your password again",
             },
+            validatePasswords,
           ]}
-          name="password"
         >
           <Input.Password placeholder="Confirm your password" />
         </Form.Item>
