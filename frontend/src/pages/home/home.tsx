@@ -27,7 +27,7 @@ const Home: React.FC = () => {
     if (isError) {
       messageApi.open({
         type: "error",
-        content: "Item getting failed",
+        content: "Items getting failed",
       });
     }
     if (postSuccess) {

@@ -11,35 +11,43 @@ const SigninForm = () => {
 
   const onSignUp = async (data: userlogingTypes) => {
     setLoad(true);
-    const res = await fetch("http://localhost:8080/api/users/add-user", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      }),
-    });
-    if (res.ok) {
-      setLoad(false);
-      message.open({
-        type: "success",
-        content: "Registered successfully!",
+    try {
+      const res = await fetch("http://localhost:8080/api/users/add-user", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        }),
       });
-    }
-    if (res.status === 401) {
+      if (res.ok) {
+        setLoad(false);
+        message.open({
+          type: "success",
+          content: "Registered successfully!",
+        });
+      }
+      if (res.status === 401) {
+        setLoad(false);
+        message.open({
+          type: "error",
+          content: "The email is already taken!",
+        });
+      } else if (!res.ok) {
+        setLoad(false);
+        message.open({
+          type: "error",
+          content: "User signup failed!",
+        });
+      }
+    } catch (error) {
       setLoad(false);
       message.open({
         type: "error",
-        content: "The email is already taken!",
-      });
-    } else if (!res.ok) {
-      setLoad(false);
-      message.open({
-        type: "error",
-        content: "Something went wrong!",
+        content: "User signup failed!",
       });
     }
   };
