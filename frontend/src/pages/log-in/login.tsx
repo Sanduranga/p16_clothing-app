@@ -5,8 +5,11 @@ import { RootState } from "../../redux/store";
 import { loggedIn, openDrawer, signInForm } from "../../slices/appActions";
 import LoginForm from "./sub-components/login-form";
 import SigninForm from "./sub-components/signinForm";
+import { useNavigate } from "react-router-dom";
 
 export const Login: React.FC = () => {
+  const navigate = useNavigate();
+
   const action = useSelector((state: RootState) => state.appController.drawer);
   const signIn = useSelector(
     (state: RootState) => state.appController.signInForm
@@ -42,7 +45,10 @@ export const Login: React.FC = () => {
           {logged ? (
             <Button
               style={{ marginBottom: 10, marginLeft: 10 }}
-              onClick={() => dispatch(loggedIn(false))}
+              onClick={() => {
+                dispatch(loggedIn(false));
+                navigate("/");
+              }}
               danger
             >
               Sign out
