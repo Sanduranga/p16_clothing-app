@@ -14,7 +14,7 @@
   padding-right: 10px;
 }
 
-.cartLogin {
+.login {
   display: flex;
   gap: 20px;
   align-items: center;
@@ -27,12 +27,6 @@
 .itemCardImage {
   height: 150px !important;
   object-fit: scale-down;
-}
-
-.clickedImage {
-  height: 300px !important;
-  object-fit: contain;
-  object-position: center;
 }
 
 .addItem {

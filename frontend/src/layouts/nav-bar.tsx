@@ -44,7 +44,7 @@ const Navbar = () => {
           },
         ]}
       />
-      <div className="cartLogin">
+      <div className="login">
         {loggedIn && (
           <>
             <Link style={{ textDecoration: "none" }} to={"/add-items"}>
