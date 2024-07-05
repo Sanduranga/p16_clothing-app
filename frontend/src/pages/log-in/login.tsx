@@ -19,13 +19,20 @@ export const Login: React.FC = () => {
   );
   const dispatch = useDispatch();
 
+  const onClose = () => {
+    dispatch(openDrawer());
+  };
+
   return (
     <>
       <Drawer
-        title={`Hi.. ${signIn ? "signup" : "login"} here.`}
+        title={`Hi..👋 ${
+          signIn ? "signup here." : logged ? "" : "login here."
+        } `}
         placement={"left"}
         width={800}
         open={action}
+        onClose={onClose}
         closable={false}
         style={{
           position: "relative",
@@ -39,6 +46,7 @@ export const Login: React.FC = () => {
           <Button
             style={{ marginBottom: 10 }}
             onClick={() => dispatch(openDrawer())}
+            type="primary"
           >
             Back
           </Button>

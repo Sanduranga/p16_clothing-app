@@ -67,6 +67,7 @@ export const SetDiscount = () => {
   useEffect(() => {
     if (isGetSuccess) {
       const aa = saleStorePriceCal(
+        // calling utility function to calculate new prices
         getInputs.salePercentage,
         data.startingPrice
       );
@@ -114,6 +115,7 @@ export const SetDiscount = () => {
         item.sellingType === "sale" &&
         data.buyingPrice &&
         getInputs.salePrice < data.buyingPrice
+        // checks whether outsource product's buying price greater than new sale price and if true set error msg.
       ) {
         message.open({
           type: "error",
@@ -147,13 +149,24 @@ export const SetDiscount = () => {
           justify="center"
           gutter={[20, { sm: 20, xs: 20 }]}
         >
-          <Col sm={24} md={12} lg={12}>
+          <Col
+            sm={24}
+            md={12}
+            lg={12}
+            style={{
+              backgroundColor: "#dae6dd",
+              padding: 10,
+              boxShadow: "1px 2px 2px #00000055",
+            }}
+          >
             <Form layout="vertical" onFinish={handleSubmit}>
-              <Row gutter={{ sm: 20 }}>
+              <Row gutter={{ sm: 20 }} justify={"center"}>
                 <Col md={{ span: 8 }} sm={12} xs={24}>
                   {isGetSuccess && data.buyingPrice && data.buyingPrice > 0 ? (
                     <>
-                      <Typography>Item is: Another seller product</Typography>
+                      <Typography.Title level={5}>
+                        This item is: Another seller product
+                      </Typography.Title>
                       <Typography>
                         Buying price is: {data.buyingPrice}
                       </Typography>
@@ -163,10 +176,12 @@ export const SetDiscount = () => {
                     </>
                   ) : (
                     <>
-                      <Typography>Item Is: Our product</Typography>
-                      <Typography>
+                      <Typography.Title level={5}>
+                        This item Is: Our product
+                      </Typography.Title>
+                      <Typography.Text strong>
                         Starting price is: {data?.startingPrice}
-                      </Typography>
+                      </Typography.Text>
                     </>
                   )}
 
@@ -255,14 +270,17 @@ export const SetDiscount = () => {
                   </Typography.Title>
                 </Col>
               </Row>
-              <Form.Item>
-                <Button
-                  loading={IsLoadingSaleItem || IsLoadingStockClrItem}
-                  htmlType="submit"
-                >
-                  Submit
-                </Button>
-              </Form.Item>
+              <Row justify={"center"}>
+                <Form.Item>
+                  <Button
+                    loading={IsLoadingSaleItem || IsLoadingStockClrItem}
+                    htmlType="submit"
+                    type="primary"
+                  >
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Row>
             </Form>
           </Col>
         </Row>

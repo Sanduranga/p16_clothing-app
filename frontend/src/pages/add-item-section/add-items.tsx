@@ -76,9 +76,8 @@ export const AddItems = () => {
       code: code,
       numberOfItems: data.numberOfItems,
       status: "normalStore",
-      salePrice: null,
-      salePercentage: null,
-      stockClearingPrice: null,
+      saleItems: null,
+      stockClearItems: null,
     });
   };
 
@@ -88,7 +87,6 @@ export const AddItems = () => {
         type: "success",
         content: "Item added successfully!",
       });
-      // navigate("/");
     }
     if (isError) {
       messageApi.open({
@@ -104,7 +102,7 @@ export const AddItems = () => {
       {contextHolder}
       <Form layout="vertical" onFinish={handleSubmit}>
         <Row justify={"center"} gutter={{ sm: 20 }}>
-          <Col md={{ span: 8 }} sm={12} xs={24}>
+          <Col md={8} sm={12} xs={24}>
             <Form.Item
               label="Item is"
               name="itemIs"
