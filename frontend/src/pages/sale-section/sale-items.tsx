@@ -1,9 +1,9 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
-  useGetAllItemsQuery,
-  useUpdateItemMutation,
   useResetMutationStateMutation,
+  useGetAllSaleItemsQuery,
+  useDeleteSaleItemMutation,
 } from "../../api";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -15,9 +15,9 @@ export const SaleItems: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllItemsQuery();
-  const [updateItem, { isSuccess: updateSuccess, isError: updateError }] =
-    useUpdateItemMutation();
+  const { data, isLoading, isError } = useGetAllSaleItemsQuery();
+  const [deleteSaleItem, { isSuccess: deleteSuccess, isError: deleteError }] =
+    useDeleteSaleItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
@@ -28,19 +28,19 @@ export const SaleItems: React.FC = () => {
           content: "Item getting failed",
         });
       }
-      if (updateSuccess) {
+      if (deleteSuccess) {
         messageApi.open({
           type: "success",
           content: "item reset to normal section successfully!",
         });
       }
-      if (updateError) {
+      if (deleteError) {
         messageApi.open({
           type: "error",
           content: "item reset to normal section failed!",
         });
       }
-      resetMutationState(updateItem);
+      resetMutationState(deleteSaleItem);
     } catch (error) {
       console.log("error");
 
@@ -49,7 +49,7 @@ export const SaleItems: React.FC = () => {
         content: "Item getting failed!",
       });
     }
-  }, [isError, updateSuccess, updateError]);
+  }, [isError, deleteSuccess, deleteError]);
 
   return (
     <div style={{ margin: 20 }}>
@@ -68,75 +68,56 @@ export const SaleItems: React.FC = () => {
         renderItem={(products, index) => {
           return (
             <List.Item key={index}>
-              {products.status === "saleStore" ? (
-                <Badge.Ribbon
-                  text={`${products.salePercentage}% sale`}
-                  color={"yellow"}
+              <Badge.Ribbon
+                text={`${products.salePercentage}% sale`}
+                color={"yellow"}
+              >
+                <Card
+                  title={products.itemId?.itemTitle}
+                  actions={[
+                    <ShoppingCartOutlined />,
+                    logged && (
+                      <Button
+                        type="primary"
+                        style={{ padding: 2 }}
+                        onClick={() => {
+                          deleteSaleItem(products.id);
+                        }}
+                      >
+                        Undo discount
+                      </Button>
+                    ),
+                  ]}
+                  cover={
+                    <Image
+                      preview={false}
+                      className="itemCardImage"
+                      src={"bag.jpg"}
+                    />
+                  }
+                  loading={isLoading}
                 >
-                  <Card
-                    title={products.itemTitle}
-                    actions={[
-                      <ShoppingCartOutlined />,
-                      logged && (
-                        <Button
-                          type="primary"
-                          style={{ padding: 2 }}
-                          onClick={() => {
-                            updateItem({
-                              itemColor: products.itemColor,
-                              itemTitle: products.itemTitle,
-                              itemSize: products.itemSize,
-                              itemType: products.itemType,
-                              materialName: products.materialName,
-                              sellerName: products.sellerName,
-                              buyingPrice: products.buyingPrice,
-                              profitPercentage: products.profitPercentage,
-                              startingPrice: products.startingPrice,
-                              description: products.description,
-                              code: products.code,
-                              numberOfItems: products.numberOfItems,
-                              status: "normalStore",
-                              salePrice: null,
-                              salePercentage: null,
-                              stockClearingPrice: null,
-                            });
-                          }}
-                        >
-                          Undo discount
-                        </Button>
-                      ),
-                    ]}
-                    cover={
-                      <Image
-                        preview={false}
-                        className="itemCardImage"
-                        src={"bag.jpg"}
-                      />
+                  <Card.Meta
+                    title={
+                      <Typography.Paragraph>
+                        Price: Rs
+                        {products.salePrice}
+                      </Typography.Paragraph>
                     }
-                    loading={isLoading}
-                  >
-                    <Card.Meta
-                      title={
-                        <Typography.Paragraph>
-                          Price: Rs
-                          {products.salePrice}
-                        </Typography.Paragraph>
-                      }
-                      description={
-                        <Typography.Paragraph
-                          ellipsis={{
-                            rows: 2,
-                            expandable: true,
-                            symbol: "more",
-                          }}
-                        >
-                          {products.description}
-                        </Typography.Paragraph>
-                      }
-                    ></Card.Meta>
-                  </Card>
-                </Badge.Ribbon>
-              ) : null}
+                    description={
+                      <Typography.Paragraph
+                        ellipsis={{
+                          rows: 2,
+                          expandable: true,
+                          symbol: "more",
+                        }}
+                      >
+                        {products.itemId?.description}
+                      </Typography.Paragraph>
+                    }
+                  ></Card.Meta>
+                </Card>
+              </Badge.Ribbon>
             </List.Item>
           );
         }}

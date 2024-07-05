@@ -1,17 +1,3 @@
-// export interface allProductsTypes {
-//   id: number;
-//   title: string;
-//   description: string;
-//   price: number;
-//   discountPercentage: number;
-//   rating: number;
-//   stock: number;
-//   brand: string;
-//   category: string;
-//   thumbnail: string;
-//   images: [];
-// }
-
 export interface getDatatypes {
   products: itemTypes[];
   limite: number;
@@ -23,6 +9,19 @@ export interface userlogingTypes {
   email: string;
   password: string;
   userType: string;
+}
+
+export interface saleItemsTypes {
+  id: number;
+  salePrice: number;
+  salePercentage: number;
+  itemId?: itemTypes;
+}
+
+export interface stockClearItemsTypes {
+  id: number;
+  stockClearingPrice: number;
+  itemId?: itemTypes;
 }
 
 export interface itemTypes {
@@ -38,10 +37,9 @@ export interface itemTypes {
   numberOfItems: number;
   buyingPrice?: number;
   startingPrice: number;
-  profitPercentage?: number | null;
-  salePrice?: number | null;
-  salePercentage?: number | null;
-  stockClearingPrice?: number | null; // 12 variables
+  profitPercentage?: number;
+  saleItems: saleItemsTypes | null;
+  stockClearItems: stockClearItemsTypes | null; // 15 variables
 }
 
 export interface NormalStoreTypes extends itemTypes {

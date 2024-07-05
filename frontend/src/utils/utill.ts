@@ -1,3 +1,5 @@
+// If we have to solve logic also without JSX element and React hook and that logic is possible to reuse, we can make utility function. Here I am making utility fuction withing purpose reuse in future.
+
 function substractor(word: string) {
   const data = word.replace(/\s/g, "").toLowerCase();
 
@@ -38,28 +40,3 @@ export function saleStorePriceCal(
   const total = sellingPrice - (sellingPrice * salePercentage) / 100;
   return total;
 }
-
-// export function SalePriceCal(
-//   sellingPrice: number,
-//   buyingPrice: number,
-//   salePercentage: number,
-//   profitPercentage: number,
-//   sellingType: string,
-//   itemIs: string
-// ) {
-//   if (itemIs === "ourProduct" && sellingType === "sale") {
-//     console.log("1");
-
-//     return sellingPrice - (sellingPrice * salePercentage) / 100;
-//   }
-
-//   if (itemIs === "anotherSellerProduct") {
-//     console.log("2");
-//     return buyingPrice - (buyingPrice * profitPercentage) / 100;
-//   }
-
-//   if (itemIs === "anotherSellerProduct" && sellingType === "sale") {
-//     console.log("3");
-//     return buyingPrice - (buyingPrice * salePercentage) / 100;
-//   }
-// }

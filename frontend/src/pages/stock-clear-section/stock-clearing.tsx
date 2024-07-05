@@ -1,9 +1,9 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
-  useGetAllItemsQuery,
+  useDeleteStockClearItemMutation,
+  useGetAllStockClearItemsQuery,
   useResetMutationStateMutation,
-  useUpdateItemMutation,
 } from "../../api";
 import { useEffect } from "react";
 import { RootState } from "../../redux/store";
@@ -15,32 +15,35 @@ const StockClearingItems: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllItemsQuery();
-  const [updateItem, { isSuccess: updateSuccess, isError: updateError }] =
-    useUpdateItemMutation();
+  const { data, isLoading, isError } = useGetAllStockClearItemsQuery();
+  const [
+    deleteStockClearItem,
+    { isSuccess: deleteSuccessStockItm, isError: deleteErrorStockItm },
+  ] = useDeleteStockClearItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
+    // for handling status messages
     if (isError) {
       messageApi.open({
         type: "error",
         content: "Item getting failed",
       });
     }
-    if (updateSuccess) {
+    if (deleteSuccessStockItm) {
       messageApi.open({
         type: "success",
         content: "item reset to normal section successfully!",
       });
     }
-    if (updateError) {
+    if (deleteErrorStockItm) {
       messageApi.open({
         type: "error",
         content: "item reset to normal section failed!",
       });
     }
-    resetMutationState(updateItem);
-  }, [isError, updateSuccess, updateError]);
+    resetMutationState(deleteStockClearItem);
+  }, [isError, deleteSuccessStockItm, deleteErrorStockItm]);
 
   return (
     <div style={{ margin: 20 }}>
@@ -59,72 +62,60 @@ const StockClearingItems: React.FC = () => {
         renderItem={(products, index) => {
           return (
             <List.Item key={index}>
-              {products.status === "saleStore" ? (
-                <Badge.Ribbon text={"stockclear"} color={"red"}>
-                  <Card
-                    title={products.itemTitle}
-                    actions={[
-                      <ShoppingCartOutlined />,
-                      logged && (
-                        <Button
-                          type="primary"
-                          style={{ padding: 2 }}
-                          onClick={() => {
-                            updateItem({
-                              itemColor: products.itemColor,
-                              itemTitle: products.itemTitle,
-                              itemSize: products.itemSize,
-                              itemType: products.itemType,
-                              materialName: products.materialName,
-                              sellerName: products.sellerName,
-                              buyingPrice: products.buyingPrice,
-                              profitPercentage: products.profitPercentage,
-                              startingPrice: products.startingPrice,
-                              description: products.description,
-                              code: products.code,
-                              numberOfItems: products.numberOfItems,
-                              status: "normalStore",
-                              salePrice: null,
-                              salePercentage: null,
-                              stockClearingPrice: null,
+              <Badge.Ribbon text={"stockclear"} color={"red"}>
+                <Card
+                  title={products.itemId?.itemTitle}
+                  actions={[
+                    <ShoppingCartOutlined />,
+                    logged && (
+                      <Button
+                        type="primary"
+                        style={{ padding: 2 }}
+                        onClick={() => {
+                          try {
+                            deleteStockClearItem(products.id);
+                          } catch (error) {
+                            messageApi.open({
+                              type: "error",
+                              content: "Item resetting failed!",
                             });
-                          }}
-                        >
-                          Undo discount
-                        </Button>
-                      ),
-                    ]}
-                    cover={
-                      <Image
-                        preview={false}
-                        className="itemCardImage"
-                        src={"bag.jpg"}
-                      />
+                          }
+                        }}
+                      >
+                        Undo discount
+                      </Button>
+                    ),
+                  ]}
+                  cover={
+                    <Image
+                      preview={false}
+                      className="itemCardImage"
+                      src={"bag.jpg"}
+                    />
+                  }
+                  loading={isLoading}
+                >
+                  <Card.Meta
+                    title={
+                      <Typography.Paragraph>
+                        Price: Rs
+                        {products.stockClearingPrice}
+                      </Typography.Paragraph>
                     }
-                    loading={isLoading}
-                  >
-                    <Card.Meta
-                      title={
-                        <Typography.Paragraph>
-                          Price: Rs
-                          {products.stockClearingPrice}
-                        </Typography.Paragraph>
-                      }
-                      description={
-                        <Typography.Paragraph
-                          ellipsis={{
-                            rows: 2,
-                            expandable: true,
-                            symbol: "more",
-                          }}
-                        >
-                          {products.description}
-                        </Typography.Paragraph>
-                      }
-                    ></Card.Meta>
-                  </Card>
-                </Badge.Ribbon>
-              ) : null}
+                    description={
+                      <Typography.Paragraph
+                        ellipsis={{
+                          rows: 2,
+                          expandable: true,
+                          symbol: "more",
+                        }}
+                      >
+                        {products.itemId?.description}
+                      </Typography.Paragraph>
+                    }
+                  ></Card.Meta>
+                </Card>
+              </Badge.Ribbon>
             </List.Item>
           );
         }}

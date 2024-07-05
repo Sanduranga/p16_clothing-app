@@ -9,7 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ConfigProvider
+    <ConfigProvider // here I use this antd `ConfigProvider` for making changes for antd components in globaly.
       theme={{
         components: {
           Carousel: {

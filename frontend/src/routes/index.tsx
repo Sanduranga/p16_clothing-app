@@ -24,7 +24,7 @@ export const router = [
         element: <AddItemsPage />,
       },
       {
-        path: "/set-discount/:code",
+        path: "/set-discount/:code", // making route with a parameter `code`
         element: <SetDiscountPage />,
       },
       {

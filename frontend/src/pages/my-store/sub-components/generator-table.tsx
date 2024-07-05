@@ -1,10 +1,10 @@
 import { Table, TableProps, Tag, Typography } from "antd";
-import { NormalStoreTypes } from "../../../types/types";
+import { itemTypes } from "../../../types/types";
 
-const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
+const GeneratorTable = ({ tableData }: { tableData: itemTypes[] }) => {
   const { Text } = Typography;
 
-  const columns: TableProps<NormalStoreTypes>["columns"] = [
+  const columns: TableProps<itemTypes>["columns"] = [
     {
       title: "Code",
       dataIndex: "code",
@@ -65,14 +65,14 @@ const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
     {
       title: "Percentage",
       key: "percentage",
-      render: (_, { profitPercentage, salePercentage, status }) => (
+      render: (_, { profitPercentage, saleItems, status }) => (
         <>
           {status === "normalStore" ? (
             <>
               <Text type="success">(+{profitPercentage}%)</Text>
             </>
           ) : status === "saleStore" ? (
-            <Text type="warning">(-{salePercentage}%)</Text>
+            <Text type="warning">(-{saleItems?.salePercentage}%)</Text>
           ) : (
             <Text type="danger">-</Text>
           )}
@@ -82,11 +82,11 @@ const GeneratorTable = ({ tableData }: { tableData: NormalStoreTypes[] }) => {
     {
       title: "Display price",
       key: "selling price",
-      render: (_, { salePrice, startingPrice, stockClearingPrice }) =>
-        salePrice
-          ? salePrice
-          : stockClearingPrice
-          ? stockClearingPrice
+      render: (_, { saleItems, startingPrice, stockClearItems }) =>
+        saleItems?.salePrice
+          ? saleItems?.salePrice
+          : stockClearItems?.stockClearingPrice
+          ? stockClearItems?.stockClearingPrice
           : startingPrice,
     },
   ];

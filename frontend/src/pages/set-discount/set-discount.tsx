@@ -12,7 +12,11 @@ import {
 import { saleStorePriceCal } from "../../utils/utill";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetOneItemQuery, useUpdateItemMutation } from "../../api";
+import {
+  useGetOneItemQuery,
+  usePostSaleItemMutation,
+  usePostStockClearItemMutation,
+} from "../../api";
 import { allDataTypes } from "../../types/types";
 import { useResetMutationStateMutation } from "../../api";
 
@@ -26,7 +30,7 @@ export const SetDiscount = () => {
 
   const navigate = useNavigate();
 
-  const { code } = useParams<{ code: "string" }>();
+  const { code } = useParams<{ code: "string" }>(); // catching path variable by using `useParams`
   const {
     data,
     isLoading,
@@ -36,13 +40,21 @@ export const SetDiscount = () => {
     skip: !code,
   });
   const [
-    updateItem,
+    postSaleItem,
     {
-      isLoading: IsLoadingUpdateItem,
-      isSuccess: IsSuccessUpdateItem,
-      isError: IsUpdateError,
+      isLoading: IsLoadingSaleItem,
+      isSuccess: IsSuccessSaleItem,
+      isError: IsSaleError,
     },
-  ] = useUpdateItemMutation();
+  ] = usePostSaleItemMutation();
+  const [
+    postStockClearItem,
+    {
+      isLoading: IsLoadingStockClrItem,
+      isSuccess: IsSuccessStockClrItem,
+      isError: IsStockClrError,
+    },
+  ] = usePostStockClearItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   const handleSelectChange = (value: string, name: string) => {
@@ -63,29 +75,38 @@ export const SetDiscount = () => {
   }, [getInputs.salePercentage]);
 
   useEffect(() => {
+    // handle messages
     if (error) {
       message.open({
         type: "error",
         content: "Item getting error!",
       });
     }
-    if (isGetSuccess) {
-      if (IsSuccessUpdateItem) {
-        message.open({
-          type: "success",
-          content: "moved item successfully!",
-        });
-        resetMutationState(updateItem);
-        navigate(-1);
-      }
+    if (IsSuccessSaleItem || IsSuccessStockClrItem) {
+      message.open({
+        type: "success",
+        content: "moved item successfully!",
+      });
+      resetMutationState(postSaleItem);
+      resetMutationState(postStockClearItem);
+      navigate(-1);
     }
-    if (IsUpdateError) {
+
+    if (IsSaleError || IsStockClrError) {
       message.open({
         type: "error",
         content: "Item moving error!",
       });
+      resetMutationState(postSaleItem);
+      resetMutationState(postStockClearItem);
     }
-  }, [error, IsSuccessUpdateItem, IsUpdateError]);
+  }, [
+    error,
+    IsSuccessSaleItem,
+    IsSuccessStockClrItem,
+    IsSaleError,
+    IsStockClrError,
+  ]);
 
   const handleSubmit = (submitData: allDataTypes) => {
     if (isGetSuccess) {
@@ -102,51 +123,17 @@ export const SetDiscount = () => {
       }
 
       if (submitData.status === "sale") {
-        updateItem({
+        postSaleItem({
           id: data.id,
-          itemColor: data.itemColor,
-          itemSize: data.itemSize,
-          itemType: data.itemType,
-          itemTitle: data.itemTitle,
-          sellerName: data.sellerName,
-          materialName: data.materialName,
-          buyingPrice: data.buyingPrice,
           salePercentage: getInputs.salePercentage,
-          startingPrice: data.startingPrice,
           salePrice: getInputs.salePrice,
-          description: data.description,
-          status: "saleStore",
-          code: data.code,
-          numberOfItems: data.numberOfItems,
-          stockClearingPrice: null,
-          profitPercentage: data.profitPercentage,
         });
       } else {
-        updateItem({
+        postStockClearItem({
           id: data.id,
-          itemColor: data.itemColor,
-          itemSize: data.itemSize,
-          itemType: data.itemType,
-          itemTitle: data.itemTitle,
-          sellerName: data.sellerName,
-          materialName: data.materialName,
-          buyingPrice: data.buyingPrice,
           stockClearingPrice: getInputs.stockClearingPrice,
-          startingPrice: data.startingPrice,
-          description: data.description,
-          status: "stockClearingStore",
-          code: data.code,
-          numberOfItems: data.numberOfItems,
-          salePercentage: null,
-          salePrice: null,
-          profitPercentage: data.profitPercentage,
         });
       }
-      // setGetInputs({
-      //   salePercentage: 0,
-      //   salePrice: 0,
-      //   stockClearingPrice: 0,
-      // });
     }
   };
 
@@ -168,10 +155,10 @@ export const SetDiscount = () => {
                     <>
                       <Typography>Item is: Another seller product</Typography>
                       <Typography>
-                        Buying price is: {data?.buyingPrice}
+                        Buying price is: {data.buyingPrice}
                       </Typography>
                       <Typography>
-                        Present price is: {data?.startingPrice}
+                        Present price is: {data.startingPrice}
                       </Typography>
                     </>
                   ) : (
@@ -269,7 +256,10 @@ export const SetDiscount = () => {
                 </Col>
               </Row>
               <Form.Item>
-                <Button loading={IsLoadingUpdateItem} htmlType="submit">
+                <Button
+                  loading={IsLoadingSaleItem || IsLoadingStockClrItem}
+                  htmlType="submit"
+                >
                   Submit
                 </Button>
               </Form.Item>

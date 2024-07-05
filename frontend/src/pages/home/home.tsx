@@ -6,8 +6,9 @@ import { RootState } from "../../redux/store";
 import { useEffect } from "react";
 import {
   useGetAllItemsQuery,
-  useUpdateItemMutation,
+  useDeleteSaleItemMutation,
   useResetMutationStateMutation,
+  useDeleteStockClearItemMutation,
 } from "../../api";
 
 const Home: React.FC = () => {
@@ -19,8 +20,14 @@ const Home: React.FC = () => {
   );
 
   const { data, isLoading, isError } = useGetAllItemsQuery();
-  const [updateItem, { isSuccess: postSuccess, isError: postError }] =
-    useUpdateItemMutation();
+  const [
+    deleteSaleItem,
+    { isSuccess: deleteSuccessSaleItm, isError: deleteErrorSaleItm },
+  ] = useDeleteSaleItemMutation();
+  const [
+    deleteStockClearItem,
+    { isSuccess: deleteSuccessStockItm, isError: deleteErrorStockItm },
+  ] = useDeleteStockClearItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
@@ -30,20 +37,41 @@ const Home: React.FC = () => {
         content: "Items getting failed",
       });
     }
-    if (postSuccess) {
+    if (deleteSuccessSaleItm) {
       messageApi.open({
         type: "success",
         content: "item reset to normal section successfully!",
       });
+      resetMutationState(deleteSaleItem);
     }
-    if (postError) {
+    if (deleteSuccessStockItm) {
+      messageApi.open({
+        type: "success",
+        content: "item reset to normal section successfully!",
+      });
+      resetMutationState(deleteStockClearItem);
+    }
+    if (deleteErrorSaleItm) {
       messageApi.open({
         type: "error",
         content: "item reset to normal section failed!",
       });
+      resetMutationState(deleteSaleItem);
     }
-    resetMutationState(updateItem);
-  }, [isError, postSuccess, postError]);
+    if (deleteErrorStockItm) {
+      messageApi.open({
+        type: "error",
+        content: "item reset to normal section failed!",
+      });
+      resetMutationState(deleteStockClearItem);
+    }
+  }, [
+    isError,
+    deleteSuccessSaleItm,
+    deleteSuccessStockItm,
+    deleteErrorSaleItm,
+    deleteErrorStockItm,
+  ]);
 
   return (
     <div style={{ margin: 20 }}>
@@ -65,7 +93,7 @@ const Home: React.FC = () => {
               <Badge.Ribbon
                 text={
                   products.status === "saleStore"
-                    ? `${products.salePercentage}% sale`
+                    ? `${products.saleItems?.salePercentage}% sale`
                     : products.status === "stockClearingStore"
                     ? "stock clearing"
                     : null
@@ -90,30 +118,15 @@ const Home: React.FC = () => {
                       >
                         Set discount
                       </Button>
-                    ) : logged ? (
+                    ) : logged && products.status === "saleStore" ? (
                       <Button
                         type="primary"
-                        onClick={async () => {
+                        onClick={() => {
                           try {
-                            await updateItem({
-                              id: products.id,
-                              itemColor: products.itemColor,
-                              itemTitle: products.itemTitle,
-                              itemSize: products.itemSize,
-                              itemType: products.itemType,
-                              materialName: products.materialName,
-                              sellerName: products.sellerName,
-                              buyingPrice: products.buyingPrice,
-                              profitPercentage: products.profitPercentage,
-                              startingPrice: products.startingPrice,
-                              description: products.description,
-                              code: products.code,
-                              numberOfItems: products.numberOfItems,
-                              status: "normalStore",
-                              salePrice: null,
-                              salePercentage: null,
-                              stockClearingPrice: null,
-                            }).unwrap();
+                            const saleItemId = products.saleItems?.id;
+                            if (saleItemId !== undefined) {
+                              deleteSaleItem(saleItemId);
+                            }
                           } catch (error) {
                             messageApi.open({
                               type: "error",
@@ -124,7 +137,28 @@ const Home: React.FC = () => {
                       >
                         Undo discount
                       </Button>
-                    ) : null,
+                    ) : (
+                      logged && (
+                        <Button
+                          type="primary"
+                          onClick={() => {
+                            try {
+                              const stockItemId = products.saleItems?.id;
+                              if (stockItemId !== undefined) {
+                                deleteStockClearItem(stockItemId);
+                              }
+                            } catch (error) {
+                              messageApi.open({
+                                type: "error",
+                                content: "Item resetting failed!",
+                              });
+                            }
+                          }}
+                        >
+                          Undo discount
+                        </Button>
+                      )
+                    ),
                   ]}
                   cover={
                     <Image
@@ -140,9 +174,9 @@ const Home: React.FC = () => {
                       <Typography.Paragraph>
                         Price: Rs
                         {products.status === "saleStore"
-                          ? products.salePrice
+                          ? products.saleItems?.salePrice
                           : products.status === "stockClearingStore"
-                          ? products.stockClearingPrice
+                          ? products.stockClearItems?.stockClearingPrice
                           : products.startingPrice}
                       </Typography.Paragraph>
                     }

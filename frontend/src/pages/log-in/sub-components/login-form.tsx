@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loggedIn, openDrawer, setUserName } from "../../../slices/appActions";
 
-const LoginForm = () => {
+const LoginForm: React.FC = () => {
   const [load, setLoad] = useState(false);
   const dispatch = useDispatch();
 
