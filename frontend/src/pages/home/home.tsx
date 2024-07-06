@@ -18,7 +18,7 @@ const Home: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllItemsQuery();
+  const { data, isSuccess, isLoading, isError } = useGetAllItemsQuery();
   const [
     deleteSaleItem,
     { isSuccess: deleteSuccessSaleItm, isError: deleteErrorSaleItm },
@@ -30,6 +30,12 @@ const Home: React.FC = () => {
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
+    if (isSuccess && data.length === 0) {
+      messageApi.open({
+        type: "warning",
+        content: "No data to get!",
+      });
+    }
     if (isError) {
       messageApi.open({
         type: "error",
@@ -112,6 +118,9 @@ const Home: React.FC = () => {
                     logged && products.status === "normalStore" ? (
                       <Button
                         type="primary"
+                        style={{
+                          fontWeight: "bold",
+                        }}
                         onClick={() =>
                           navigate(`/set-discount/${products.code}`)
                         }
@@ -120,7 +129,6 @@ const Home: React.FC = () => {
                       </Button>
                     ) : logged && products.status === "saleStore" ? (
                       <Button
-                        type="primary"
                         onClick={() => {
                           try {
                             deleteSaleItem(products.code);
@@ -137,7 +145,11 @@ const Home: React.FC = () => {
                     ) : (
                       logged && (
                         <Button
-                          type="primary"
+                          style={{
+                            borderColor: "#0b629c",
+                            color: "#cc213b",
+                            fontWeight: "bold",
+                          }}
                           onClick={() => {
                             try {
                               deleteStockClearItem(products.code);

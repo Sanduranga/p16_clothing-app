@@ -1,5 +1,4 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
   useDeleteStockClearItemMutation,
   useGetAllStockClearItemsQuery,
@@ -15,7 +14,8 @@ const StockClearingItems: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllStockClearItemsQuery();
+  const { data, isSuccess, isLoading, isError } =
+    useGetAllStockClearItemsQuery();
   const [
     deleteStockClearItem,
     { isSuccess: deleteSuccessStockItm, isError: deleteErrorStockItm },
@@ -24,6 +24,12 @@ const StockClearingItems: React.FC = () => {
 
   useEffect(() => {
     // for handling status messages
+    if (isSuccess && data.length === 0) {
+      messageApi.open({
+        type: "warning",
+        content: "No data to get!",
+      });
+    }
     if (isError) {
       messageApi.open({
         type: "error",
@@ -67,11 +73,13 @@ const StockClearingItems: React.FC = () => {
                   title={products.items?.itemTitle}
                   style={{ backgroundColor: "#ebeff5" }}
                   actions={[
-                    <ShoppingCartOutlined />,
                     logged && (
                       <Button
-                        type="primary"
-                        style={{ padding: 2 }}
+                        style={{
+                          borderColor: "#0b629c",
+                          color: "#cc213b",
+                          fontWeight: "bold",
+                        }}
                         onClick={() => {
                           try {
                             deleteStockClearItem(products.items?.code || 0.0); // `deleteStockClearItem` can't be undefine.

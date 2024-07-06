@@ -14,13 +14,19 @@ export const SaleItems: React.FC = () => {
     (state: RootState) => state.appController.loggedUser.loggedIn
   );
 
-  const { data, isLoading, isError } = useGetAllSaleItemsQuery();
+  const { data, isLoading, isSuccess, isError } = useGetAllSaleItemsQuery();
   const [deleteSaleItem, { isSuccess: deleteSuccess, isError: deleteError }] =
     useDeleteSaleItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
   useEffect(() => {
     try {
+      if (isSuccess && data.length === 0) {
+        messageApi.open({
+          type: "warning",
+          content: "No data to get!",
+        });
+      }
       if (isError) {
         messageApi.open({
           type: "error",
@@ -48,7 +54,7 @@ export const SaleItems: React.FC = () => {
         content: "Item getting failed!",
       });
     }
-  }, [isError, deleteSuccess, deleteError]);
+  }, [isSuccess, isError, deleteSuccess, deleteError]);
 
   return (
     <div style={{ margin: 20 }}>
@@ -77,8 +83,11 @@ export const SaleItems: React.FC = () => {
                   actions={[
                     logged && (
                       <Button
-                        type="primary"
-                        style={{ padding: 2 }}
+                        style={{
+                          borderColor: "#0b629c",
+                          color: "#cc213b",
+                          fontWeight: "bold",
+                        }}
                         onClick={() => {
                           deleteSaleItem(products.items?.code || 0.0); // `deleteSaleItem` can't be undefine.
                         }}

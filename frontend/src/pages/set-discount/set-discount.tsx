@@ -165,7 +165,7 @@ export const SetDiscount = () => {
                   {isGetSuccess && data.buyingPrice && data.buyingPrice > 0 ? (
                     <>
                       <Typography.Title level={5}>
-                        This is another seller product.
+                        This item is another seller product.
                       </Typography.Title>
                       <Typography.Text strong>
                         Buying price is: {data.buyingPrice}
