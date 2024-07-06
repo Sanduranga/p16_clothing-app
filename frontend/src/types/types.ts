@@ -12,19 +12,20 @@ export interface userlogingTypes {
 }
 
 export interface saleItemsTypes {
-  id: number;
+  itemsCode: number;
   salePrice: number;
   salePercentage: number;
-  itemId?: itemTypes;
+  items?: itemTypes;
 }
 
 export interface stockClearItemsTypes {
-  id: number;
+  itemsCode: number;
   stockClearingPrice: number;
-  itemId?: itemTypes;
+  items?: itemTypes;
 }
 
 export interface itemTypes {
+  code: number;
   sellerName: string;
   materialName: string;
   itemTitle: string;
@@ -32,7 +33,6 @@ export interface itemTypes {
   itemSize: string;
   description: string;
   itemType: string;
-  code: string;
   status: string;
   numberOfItems: number;
   buyingPrice?: number;
@@ -42,16 +42,16 @@ export interface itemTypes {
   stockClearItems: stockClearItemsTypes | null; // 15 variables
 }
 
-export interface NormalStoreTypes extends itemTypes {
-  id?: number;
-}
+// export interface NormalStoreTypes extends itemTypes {
+//   id?: number;
+// }
 
-export interface allDataTypes extends itemTypes {
-  id: number;
-}
+// export interface allDataTypes extends itemTypes {
+//   id: number;
+// }
 
-export interface composeDataObjects {
-  itemsData: NormalStoreTypes[];
-  saleItemsData: allDataTypes[];
-  stockClearItemsData: allDataTypes[];
-}
+// export interface composeDataObjects {
+//   itemsData: NormalStoreTypes[];
+//   saleItemsData: allDataTypes[];
+//   stockClearItemsData: allDataTypes[];
+// }

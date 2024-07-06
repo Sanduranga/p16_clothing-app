@@ -1,6 +1,5 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useEffect } from "react";
@@ -108,13 +107,14 @@ const Home: React.FC = () => {
               >
                 <Card
                   title={products.itemTitle}
+                  style={{ backgroundColor: "#ebeff5" }}
                   actions={[
-                    <ShoppingCartOutlined />,
                     logged && products.status === "normalStore" ? (
                       <Button
                         type="primary"
-                        onClick={() => navigate(`/set-discount/${products.id}`)}
-                        style={{ padding: 2 }}
+                        onClick={() =>
+                          navigate(`/set-discount/${products.code}`)
+                        }
                       >
                         Set discount
                       </Button>
@@ -123,10 +123,7 @@ const Home: React.FC = () => {
                         type="primary"
                         onClick={() => {
                           try {
-                            const saleItemId = products.saleItems?.id;
-                            if (saleItemId !== undefined) {
-                              deleteSaleItem(saleItemId);
-                            }
+                            deleteSaleItem(products.code);
                           } catch (error) {
                             messageApi.open({
                               type: "error",
@@ -143,10 +140,7 @@ const Home: React.FC = () => {
                           type="primary"
                           onClick={() => {
                             try {
-                              const stockItemId = products.saleItems?.id;
-                              if (stockItemId !== undefined) {
-                                deleteStockClearItem(stockItemId);
-                              }
+                              deleteStockClearItem(products.code);
                             } catch (error) {
                               messageApi.open({
                                 type: "error",
@@ -171,21 +165,31 @@ const Home: React.FC = () => {
                 >
                   <Card.Meta
                     title={
-                      <Typography.Paragraph>
-                        Price: Rs
+                      <Typography.Title level={3}>
+                        Rs.{""}
                         {products.status === "saleStore"
                           ? products.saleItems?.salePrice
                           : products.status === "stockClearingStore"
                           ? products.stockClearItems?.stockClearingPrice
                           : products.startingPrice}
-                      </Typography.Paragraph>
+                      </Typography.Title>
                     }
                     description={
-                      <Typography.Paragraph
-                        ellipsis={{ rows: 2, expandable: true, symbol: "more" }}
-                      >
-                        {products.description}
-                      </Typography.Paragraph>
+                      <>
+                        <Typography.Text strong>
+                          Quantity: {""}
+                          {products.numberOfItems}
+                        </Typography.Text>
+                        <Typography.Paragraph
+                          ellipsis={{
+                            rows: 1,
+                            expandable: true,
+                            symbol: "more",
+                          }}
+                        >
+                          {products.description}
+                        </Typography.Paragraph>
+                      </>
                     }
                   ></Card.Meta>
                 </Card>

@@ -1,5 +1,4 @@
 import { Badge, Button, Card, Image, List, Typography, message } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
   useResetMutationStateMutation,
   useGetAllSaleItemsQuery,
@@ -73,15 +72,15 @@ export const SaleItems: React.FC = () => {
                 color={"yellow"}
               >
                 <Card
-                  title={products.itemId?.itemTitle}
+                  title={products.items?.itemTitle}
+                  style={{ backgroundColor: "#ebeff5" }}
                   actions={[
-                    <ShoppingCartOutlined />,
                     logged && (
                       <Button
                         type="primary"
                         style={{ padding: 2 }}
                         onClick={() => {
-                          deleteSaleItem(products.id);
+                          deleteSaleItem(products.items?.code || 0.0); // `deleteSaleItem` can't be undefine.
                         }}
                       >
                         Undo discount
@@ -100,20 +99,26 @@ export const SaleItems: React.FC = () => {
                   <Card.Meta
                     title={
                       <Typography.Paragraph>
-                        Price: Rs
+                        Rs. {""}
                         {products.salePrice}
                       </Typography.Paragraph>
                     }
                     description={
-                      <Typography.Paragraph
-                        ellipsis={{
-                          rows: 2,
-                          expandable: true,
-                          symbol: "more",
-                        }}
-                      >
-                        {products.itemId?.description}
-                      </Typography.Paragraph>
+                      <>
+                        <Typography.Text strong>
+                          Quantity: {""}
+                          {products.items?.numberOfItems}
+                        </Typography.Text>
+                        <Typography.Paragraph
+                          ellipsis={{
+                            rows: 1,
+                            expandable: true,
+                            symbol: "more",
+                          }}
+                        >
+                          {products.items?.description}
+                        </Typography.Paragraph>
+                      </>
                     }
                   ></Card.Meta>
                 </Card>

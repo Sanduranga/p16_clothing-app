@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
-  NormalStoreTypes,
-  allDataTypes,
+  itemTypes,
   saleItemsTypes,
   stockClearItemsTypes,
 } from "../types/types";
@@ -13,14 +12,14 @@ export const appApi = createApi({
     baseUrl: "http://localhost:8080/api/",
   }),
   endpoints: (builder) => ({
-    getAllItems: builder.query<NormalStoreTypes[], void>({
+    getAllItems: builder.query<itemTypes[], void>({
       query: () => "items/get-items",
       providesTags: ["refresh2"],
     }),
-    getOneItem: builder.query<allDataTypes, string>({
-      query: (id) => `items/get-item?id=${id}`,
+    getOneItem: builder.query<itemTypes, string>({
+      query: (code) => `items/get-item?code=${code}`,
     }),
-    postItem: builder.mutation<void, NormalStoreTypes>({
+    postItem: builder.mutation<void, itemTypes>({
       query: (data) => ({
         url: "items/add-item",
         method: "POST",
@@ -28,7 +27,7 @@ export const appApi = createApi({
       }),
       invalidatesTags: ["refresh1", "refresh2"],
     }),
-    updateItem: builder.mutation<void, NormalStoreTypes>({
+    updateItem: builder.mutation<void, itemTypes>({
       query: (body) => ({
         url: "items/update-item",
         method: "PUT",
@@ -64,8 +63,8 @@ export const appApi = createApi({
     }),
 
     deleteSaleItem: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `sale-items/delete-item?id=${id}`,
+      query: (code) => ({
+        url: `sale-items/delete-item?code=${code}`,
         method: "DELETE",
       }),
       invalidatesTags: ["refresh2"],
@@ -88,8 +87,8 @@ export const appApi = createApi({
     }),
 
     deleteStockClearItem: builder.mutation<void, number>({
-      query: (id) => ({
-        url: `stock-clear-items/delete-item?id=${id}`,
+      query: (code) => ({
+        url: `stock-clear-items/delete-item?code=${code}`,
         method: "DELETE",
       }),
       invalidatesTags: ["refresh2"],

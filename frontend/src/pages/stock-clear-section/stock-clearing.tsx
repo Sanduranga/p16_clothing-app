@@ -64,7 +64,8 @@ const StockClearingItems: React.FC = () => {
             <List.Item key={index}>
               <Badge.Ribbon text={"stockclear"} color={"red"}>
                 <Card
-                  title={products.itemId?.itemTitle}
+                  title={products.items?.itemTitle}
+                  style={{ backgroundColor: "#ebeff5" }}
                   actions={[
                     <ShoppingCartOutlined />,
                     logged && (
@@ -73,7 +74,7 @@ const StockClearingItems: React.FC = () => {
                         style={{ padding: 2 }}
                         onClick={() => {
                           try {
-                            deleteStockClearItem(products.id);
+                            deleteStockClearItem(products.items?.code || 0.0); // `deleteStockClearItem` can't be undefine.
                           } catch (error) {
                             messageApi.open({
                               type: "error",
@@ -103,15 +104,21 @@ const StockClearingItems: React.FC = () => {
                       </Typography.Paragraph>
                     }
                     description={
-                      <Typography.Paragraph
-                        ellipsis={{
-                          rows: 2,
-                          expandable: true,
-                          symbol: "more",
-                        }}
-                      >
-                        {products.itemId?.description}
-                      </Typography.Paragraph>
+                      <>
+                        <Typography.Text strong>
+                          Quantity: {""}
+                          {products.items?.numberOfItems}
+                        </Typography.Text>
+                        <Typography.Paragraph
+                          ellipsis={{
+                            rows: 1,
+                            expandable: true,
+                            symbol: "more",
+                          }}
+                        >
+                          {products.items?.description}
+                        </Typography.Paragraph>
+                      </>
                     }
                   ></Card.Meta>
                 </Card>

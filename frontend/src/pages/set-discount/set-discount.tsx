@@ -17,7 +17,7 @@ import {
   usePostSaleItemMutation,
   usePostStockClearItemMutation,
 } from "../../api";
-import { allDataTypes } from "../../types/types";
+import { itemTypes } from "../../types/types";
 import { useResetMutationStateMutation } from "../../api";
 
 export const SetDiscount = () => {
@@ -30,7 +30,7 @@ export const SetDiscount = () => {
 
   const navigate = useNavigate();
 
-  const { code } = useParams<{ code: "string" }>(); // catching path variable by using `useParams`
+  const { code } = useParams<{ code: string }>(); // catching path variable by using `useParams`
   const {
     data,
     isLoading,
@@ -109,7 +109,7 @@ export const SetDiscount = () => {
     IsStockClrError,
   ]);
 
-  const handleSubmit = (submitData: allDataTypes) => {
+  const handleSubmit = (submitData: itemTypes) => {
     if (isGetSuccess) {
       if (
         item.sellingType === "sale" &&
@@ -126,13 +126,13 @@ export const SetDiscount = () => {
 
       if (submitData.status === "sale") {
         postSaleItem({
-          id: data.id,
+          itemsCode: data.code,
           salePercentage: getInputs.salePercentage,
           salePrice: getInputs.salePrice,
         });
       } else {
         postStockClearItem({
-          id: data.id,
+          itemsCode: data.code,
           stockClearingPrice: getInputs.stockClearingPrice,
         });
       }
@@ -161,15 +161,15 @@ export const SetDiscount = () => {
           >
             <Form layout="vertical" onFinish={handleSubmit}>
               <Row gutter={{ sm: 20 }} justify={"center"}>
-                <Col md={{ span: 8 }} sm={12} xs={24}>
+                <Col span={18}>
                   {isGetSuccess && data.buyingPrice && data.buyingPrice > 0 ? (
                     <>
                       <Typography.Title level={5}>
-                        This item is: Another seller product
+                        This is another seller product.
                       </Typography.Title>
-                      <Typography>
+                      <Typography.Text strong>
                         Buying price is: {data.buyingPrice}
-                      </Typography>
+                      </Typography.Text>
                       <Typography>
                         Present price is: {data.startingPrice}
                       </Typography>
@@ -177,7 +177,7 @@ export const SetDiscount = () => {
                   ) : (
                     <>
                       <Typography.Title level={5}>
-                        This item Is: Our product
+                        We own this item.
                       </Typography.Title>
                       <Typography.Text strong>
                         Starting price is: {data?.startingPrice}
