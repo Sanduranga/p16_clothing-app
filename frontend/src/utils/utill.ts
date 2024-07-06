@@ -22,7 +22,43 @@ export function CodeGenerater(
   const code5 = substractor(material);
   const code = code1 + code2 + code3 + code4 + code5;
 
-  return code as string;
+  const charMap = {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: 4,
+    e: 5,
+    f: 6,
+    g: 7,
+    h: 8,
+    i: 9,
+    j: 10,
+    k: 11,
+    l: 12,
+    m: 13,
+    n: 14,
+    o: 15,
+    p: 16,
+    q: 17,
+    r: 18,
+    s: 19,
+    t: 20,
+    u: 21,
+    v: 22,
+    w: 23,
+    x: 24,
+    y: 25,
+    z: 26,
+  } as any;
+
+  let finalCode = 0;
+
+  for (let char of code) {
+    // here return a number code according to string code letters
+    finalCode = finalCode * 2 + charMap[char];
+  }
+
+  return finalCode;
 }
 
 export function normalStorePriceCal(
