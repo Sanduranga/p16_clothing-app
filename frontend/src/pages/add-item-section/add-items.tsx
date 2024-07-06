@@ -8,7 +8,7 @@ import {
   Typography,
   message,
 } from "antd";
-import { NormalStoreTypes } from "../../types/types";
+import { itemTypes } from "../../types/types";
 import { useEffect, useRef, useState } from "react";
 import { CodeGenerater, normalStorePriceCal } from "../../utils/utill";
 import { usePostItemMutation } from "../../api";
@@ -47,7 +47,7 @@ export const AddItems = () => {
     setGetInputs((prevInputs) => ({ ...prevInputs, displayPrice: aa }));
   }, [getInputs.profitPercentage, getInputs.buyingPrice]);
 
-  const handleSubmit = async (data: NormalStoreTypes) => {
+  const handleSubmit = async (data: itemTypes) => {
     const code = CodeGenerater(
       item.itemIs === "ourProduct" ? "entgraItem" : data.sellerName,
       data.itemType,

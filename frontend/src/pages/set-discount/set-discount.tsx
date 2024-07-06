@@ -162,16 +162,17 @@ export const SetDiscount = () => {
             <Form layout="vertical" onFinish={handleSubmit}>
               <Row gutter={{ sm: 20 }} justify={"center"}>
                 <Col span={18}>
-                  {isGetSuccess && data.buyingPrice && data.buyingPrice > 0 ? (
+                  {data?.sellerName === "entgraItems" ? (
+                    // here checks whether the item is our own one or not
                     <>
                       <Typography.Title level={5}>
                         This item is another seller product.
                       </Typography.Title>
                       <Typography.Text strong>
-                        Buying price is: {data.buyingPrice}
+                        Buying price is: {data?.buyingPrice}
                       </Typography.Text>
                       <Typography>
-                        Present price is: {data.startingPrice}
+                        Present price is: {data?.startingPrice}
                       </Typography>
                     </>
                   ) : (
