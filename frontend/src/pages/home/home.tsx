@@ -45,32 +45,33 @@ const Home: React.FC = () => {
     if (deleteSuccessSaleItm) {
       messageApi.open({
         type: "success",
-        content: "item reset to normal section successfully!",
+        content: "item moved to normal section successfully!",
       });
       resetMutationState(deleteSaleItem);
     }
     if (deleteSuccessStockItm) {
       messageApi.open({
         type: "success",
-        content: "item reset to normal section successfully!",
+        content: "item moved to normal section successfully!",
       });
       resetMutationState(deleteStockClearItem);
     }
     if (deleteErrorSaleItm) {
       messageApi.open({
         type: "error",
-        content: "item reset to normal section failed!",
+        content: "item moved to normal section failed!",
       });
       resetMutationState(deleteSaleItem);
     }
     if (deleteErrorStockItm) {
       messageApi.open({
         type: "error",
-        content: "item reset to normal section failed!",
+        content: "item moved to normal section failed!",
       });
       resetMutationState(deleteStockClearItem);
     }
   }, [
+    isSuccess,
     isError,
     deleteSuccessSaleItm,
     deleteSuccessStockItm,

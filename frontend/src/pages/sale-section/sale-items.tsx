@@ -36,13 +36,13 @@ export const SaleItems: React.FC = () => {
       if (deleteSuccess) {
         messageApi.open({
           type: "success",
-          content: "item reset to normal section successfully!",
+          content: "item moved to normal section successfully!",
         });
       }
       if (deleteError) {
         messageApi.open({
           type: "error",
-          content: "item reset to normal section failed!",
+          content: "item moved to normal section failed!",
         });
       }
       resetMutationState(deleteSaleItem);

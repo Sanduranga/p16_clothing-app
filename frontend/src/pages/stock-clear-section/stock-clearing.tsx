@@ -39,17 +39,17 @@ const StockClearingItems: React.FC = () => {
     if (deleteSuccessStockItm) {
       messageApi.open({
         type: "success",
-        content: "item reset to normal section successfully!",
+        content: "item moved to normal section successfully!",
       });
     }
     if (deleteErrorStockItm) {
       messageApi.open({
         type: "error",
-        content: "item reset to normal section failed!",
+        content: "item moved to normal section failed!",
       });
     }
     resetMutationState(deleteStockClearItem);
-  }, [isError, deleteSuccessStockItm, deleteErrorStockItm]);
+  }, [isSuccess, isError, deleteSuccessStockItm, deleteErrorStockItm]);
 
   return (
     <div style={{ margin: 20 }}>
