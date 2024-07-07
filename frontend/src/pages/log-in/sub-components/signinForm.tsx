@@ -29,6 +29,7 @@ const SigninForm = () => {
           type: "success",
           content: "Registered successfully!",
         });
+        dispatch(signInForm(false));
       }
       if (res.status === 401) {
         setLoad(false);
