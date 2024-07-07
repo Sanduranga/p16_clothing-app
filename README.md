@@ -1,4 +1,4 @@
-⚡⚡Stock Management System⚡⚡
+⚡⚡Entgra Stock Management System⚡⚡
 This project is a Stock Management System for a clothing business, developed using a React frontend and a Java Spring Boot backend. Both are developed as Maven projects.
 
 🏋🏾‍♂️🏋🏾‍♂️ Table of Contents
@@ -24,7 +24,7 @@ Contributing
 🏋🏾‍♂️🏋🏾‍♂️ Technologies Used
 
 👍 Frontend: React, TypeScript, Ant Design, Redux
-👍 Backend: Java Spring Boot, Three tire architecture
+👍 Backend: Java Spring Boot, Three tier architecture
 👍 Database: MySQL
 👍 Containerization: Docker, Docker Compose
 
@@ -38,23 +38,16 @@ Clone the repositories (`git clone 'https://github.com....'`)
 ➡️Frontend: https://github.com/Sanduranga/p16_clothing-app.git
 ➡️Backend: https://github.com/Sanduranga/p16_backend_clothingapp.git
 
-Navigate to the project directories:
-`cd frontend-repo`
-npm install
-
-`cd ../backend-repo`
-./mvnw install
-
-🏋🏾‍♂️🏋🏾‍♂️ Usage
-
 ➡️Running Locally
 Start the backend server:
 `cd backend-repo`
+`./mvnw install`
 `./mvnw spring-boot:run`
 
 Start the frontend server:
 `cd frontend-repo`
-`npm start`
+`npm install`
+`npm run dev`
 
 🏋🏾‍♂️🏋🏾‍♂️ Docker Deployment
 
