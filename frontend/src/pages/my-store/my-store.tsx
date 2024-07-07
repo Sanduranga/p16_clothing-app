@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Input, Row, Select, message } from "antd";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { NormalStoreTypes } from "../../types/types";
+import { itemTypes } from "../../types/types";
 import GeneratorTable from "./sub-components/generator-table";
 import {
   useDeleteItemMutation,
@@ -26,7 +26,7 @@ export const MyStore: React.FC = ({}) => {
     useDeleteItemMutation();
   const [resetMutationState] = useResetMutationStateMutation();
 
-  let fetchedAllDataArray = [] as NormalStoreTypes[];
+  let fetchedAllDataArray = [] as itemTypes[];
 
   if (isSuccess) {
     fetchedAllDataArray = [...data];
@@ -34,8 +34,7 @@ export const MyStore: React.FC = ({}) => {
 
   const intialTable = fetchedAllDataArray;
 
-  const [filteredArray, setFilteredArray] =
-    useState<NormalStoreTypes[]>(intialTable);
+  const [filteredArray, setFilteredArray] = useState<itemTypes[]>(intialTable);
   const [filterInputs, setFilterInputs] = useState<inputTypes>({
     sellerName: "",
     status: "",
@@ -210,7 +209,7 @@ export const MyStore: React.FC = ({}) => {
                 { value: "entgraItems", label: "Our product" },
                 {
                   value: "notEntgraItems",
-                  label: "Out source product",
+                  label: "An outsource product",
                 },
               ]}
             />

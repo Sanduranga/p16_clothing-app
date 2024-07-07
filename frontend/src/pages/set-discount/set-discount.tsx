@@ -166,6 +166,15 @@ export const SetDiscount = () => {
                     // here checks whether the item is our own one or not
                     <>
                       <Typography.Title level={5}>
+                        We own this item.
+                      </Typography.Title>
+                      <Typography.Text strong>
+                        Starting price is: {data?.startingPrice}
+                      </Typography.Text>
+                    </>
+                  ) : (
+                    <>
+                      <Typography.Title level={5}>
                         This item is another seller product.
                       </Typography.Title>
                       <Typography.Text strong>
@@ -174,15 +183,6 @@ export const SetDiscount = () => {
                       <Typography>
                         Present price is: {data?.startingPrice}
                       </Typography>
-                    </>
-                  ) : (
-                    <>
-                      <Typography.Title level={5}>
-                        We own this item.
-                      </Typography.Title>
-                      <Typography.Text strong>
-                        Starting price is: {data?.startingPrice}
-                      </Typography.Text>
                     </>
                   )}
 

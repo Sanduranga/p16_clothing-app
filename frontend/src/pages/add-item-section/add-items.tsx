@@ -120,7 +120,7 @@ export const AddItems = () => {
                   { value: "ourProduct", label: "Our product" },
                   {
                     value: "anotherSellerProduct",
-                    label: "Another seller's product",
+                    label: "An outsourced product",
                   },
                 ]}
               />
@@ -191,15 +191,6 @@ export const AddItems = () => {
 
             {item.itemIs === "ourProduct" && (
               <>
-                {/* <Form.Item label="Seller Name" name="sellerName">
-                  <Input
-                    name="sellerName"
-                    variant="filled"
-                    placeholder={"entgraItem"}
-                    value={"entgraItem"}
-                    disabled
-                  />
-                </Form.Item> */}
                 <Form.Item
                   label="Starting Price"
                   name="startingPrice"
@@ -262,14 +253,10 @@ export const AddItems = () => {
                   options={[
                     { value: "mensShirts", label: "Men's Shirts" },
                     { value: "mensGeans", label: "Men's Geans" },
-                    { value: "mensShoes", label: "Men's Shoes" },
                     { value: "womensBlouses", label: "Women's Blouses" },
                     { value: "womensGeans", label: "Women's Geans" },
-                    { value: "womensshoes", label: "Women's Shoes" },
-                    { value: "womensBags", label: "Women's Bags" },
                     { value: "kidsDresses", label: "Kids Dresses" },
                     { value: "kidsShoes", label: "Kids Shoes" },
-                    { value: "kidsBags", label: "Kids Bags" },
                   ]}
                 />
               </Form.Item>

@@ -127,21 +127,6 @@ const Home: React.FC = () => {
                       >
                         Set discount
                       </Button>
-                    ) : logged && products.status === "saleStore" ? (
-                      <Button
-                        onClick={() => {
-                          try {
-                            deleteSaleItem(products.code);
-                          } catch (error) {
-                            messageApi.open({
-                              type: "error",
-                              content: "Item resetting failed!",
-                            });
-                          }
-                        }}
-                      >
-                        Undo discount
-                      </Button>
                     ) : (
                       logged && (
                         <Button
@@ -152,7 +137,9 @@ const Home: React.FC = () => {
                           }}
                           onClick={() => {
                             try {
-                              deleteStockClearItem(products.code);
+                              products.status === "saleStore"
+                                ? deleteSaleItem(products.code)
+                                : deleteStockClearItem(products.code);
                             } catch (error) {
                               messageApi.open({
                                 type: "error",
