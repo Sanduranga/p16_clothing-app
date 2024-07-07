@@ -71,7 +71,9 @@ follow same procedure for backend.
 then navigate back after completing create docker images for both. `cd ..`
 then run `docker-compose up`
 
-The application should now be accessible. The frontend is usually available at http://localhost:5000 and the backend at http://localhost:8088 at your local machine server.
+⚡⚡⚡ Although successfully composed up, if backend container does not run, please run again only backend composer container.
+
+The application should now be accessible. The frontend is usually available at http://localhost:5000 and the backend at http://localhost:8080 at your local machine server.
 
 🏋🏾‍♂️🏋🏾‍♂️ Contributing
 ⚡ I'm welcome your suggetion and advices.
