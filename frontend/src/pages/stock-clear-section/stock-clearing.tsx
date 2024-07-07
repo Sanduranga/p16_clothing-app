@@ -108,7 +108,7 @@ const StockClearingItems: React.FC = () => {
                     title={
                       <Typography.Paragraph>
                         Price: Rs
-                        {products.stockClearingPrice}
+                        {products.stockClearingPrice.toFixed(2)}
                       </Typography.Paragraph>
                     }
                     description={

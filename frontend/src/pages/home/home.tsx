@@ -168,10 +168,12 @@ const Home: React.FC = () => {
                       <Typography.Title level={3}>
                         Rs.{""}
                         {products.status === "saleStore"
-                          ? products.saleItems?.salePrice
+                          ? products.saleItems?.salePrice.toFixed(2)
                           : products.status === "stockClearingStore"
-                          ? products.stockClearItems?.stockClearingPrice
-                          : products.startingPrice}
+                          ? products.stockClearItems?.stockClearingPrice.toFixed(
+                              2
+                            )
+                          : products.startingPrice.toFixed(2)}
                       </Typography.Title>
                     }
                     description={

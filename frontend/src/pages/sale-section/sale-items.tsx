@@ -74,7 +74,7 @@ export const SaleItems: React.FC = () => {
           return (
             <List.Item key={index}>
               <Badge.Ribbon
-                text={`${products.salePercentage}% sale`}
+                text={`${products.salePercentage.toFixed(1)}% sale`}
                 color={"yellow"}
               >
                 <Card
@@ -109,7 +109,7 @@ export const SaleItems: React.FC = () => {
                     title={
                       <Typography.Paragraph>
                         Rs. {""}
-                        {products.salePrice}
+                        {products.salePrice.toFixed(2)}
                       </Typography.Paragraph>
                     }
                     description={

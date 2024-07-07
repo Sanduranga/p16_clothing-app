@@ -266,8 +266,8 @@ export const SetDiscount = () => {
                   <Typography.Title level={4}>
                     Display price:{" "}
                     {item.sellingType === "sale"
-                      ? getInputs.salePrice
-                      : getInputs.stockClearingPrice}
+                      ? getInputs.salePrice.toFixed(2)
+                      : getInputs.stockClearingPrice.toFixed(2)}
                   </Typography.Title>
                 </Col>
               </Row>
